@@ -10,26 +10,26 @@ class student
 private:
 	student* next;
 public:
-	char stu_num[15];                  //Ñ§ºÅ  
-	char stu_name[30];                //ĞÕÃû  
-	float stu_score;                      //³É¼¨  
+	char stu_num[15];                  //å­¦å·  
+	char stu_name[30];                //å§“å  
+	float stu_score;                      //æˆç»©  
 
-	void afterInsert(student *p);//ÔÚ¸Ã½Úµãºó²åÈëÒ»¸ö½Úµã  
-	void afterDelete();//ÔÚ¸Ã½ÚµãºóÉ¾³ıÒ»¸ö½Úµã  
+	void afterInsert(student *p);//åœ¨è¯¥èŠ‚ç‚¹åæ’å…¥ä¸€ä¸ªèŠ‚ç‚¹  
+	void afterDelete();//åœ¨è¯¥èŠ‚ç‚¹ååˆ é™¤ä¸€ä¸ªèŠ‚ç‚¹  
 
-	student *getNext()//»ñµÃÏÂÒ»¸ö½ÚµãµÄÖ¸Õë  
+	student *getNext()//è·å¾—ä¸‹ä¸€ä¸ªèŠ‚ç‚¹çš„æŒ‡é’ˆ  
 	{
 		return next;
 	}
 
-	/***********²éÑ¯Ñ§ÉúĞÅÏ¢************/
+	/***********æŸ¥è¯¢å­¦ç”Ÿä¿¡æ¯************/
 	void getMage();
 
-	/******Ñ§ÉúĞÅÏ¢ĞŞ¸Ä******/
+	/******å­¦ç”Ÿä¿¡æ¯ä¿®æ”¹******/
 	void changeMage(int n, char *ptr);
 	void changegrade(float p);
 
-	/******¹¹Ôì*****/
+	/******æ„é€ *****/
 	student(char *num, char *name, float score);
 	student();
 };
@@ -39,7 +39,7 @@ void student::changegrade(float p)
 	stu_score = p;
 }
 
-student::student()           //¹¹Ôì  
+student::student()           //æ„é€   
 {
 	strcpy(stu_num, "\0");
 	strcpy(stu_name, "\0");
@@ -55,23 +55,23 @@ student::student(char *num, char *name, float score)
 	next = '\0';
 }
 
-void student::afterInsert(student *p)//²åÈë½Úµã  
+void student::afterInsert(student *p)//æ’å…¥èŠ‚ç‚¹  
 {
 	p->next = next;
 	next = p;
 }
 
-void student::afterDelete()        //É¾³ı½Úµã  
+void student::afterDelete()        //åˆ é™¤èŠ‚ç‚¹  
 {
 	student *p = next;
 	next = p->next;
 	delete p;
 }
 
-void student::getMage()             //»ñµÃĞÅÏ¢  
+void student::getMage()             //è·å¾—ä¿¡æ¯  
 {
-	cout << "Ñ§ºÅ£º" << stu_num << "      ĞÕÃû£º" << stu_name;
-	cout << "      c++³É¼¨£º" << stu_score << endl;
+	cout << "å­¦å·ï¼š" << stu_num << "      å§“åï¼š" << stu_name;
+	cout << "      c++æˆç»©ï¼š" << stu_score << endl;
 }
 
 void student::changeMage(int n, char *ptr)
@@ -84,23 +84,23 @@ void student::changeMage(int n, char *ptr)
 	}
 }
 
-//½¨Á¢Á´±íº¯Êı  
+//å»ºç«‹é“¾è¡¨å‡½æ•°  
 void  construct_list(student *tail)
 {
 	student *p = new student;
 	char very[20];
 	float achieve;
-	cout << "ÇëÊäÈëÑ§ºÅ:" << endl;
+	cout << "è¯·è¾“å…¥å­¦å·:" << endl;
 	cin >> very;
 	p->changeMage(1, very);
-	cout << "ÇëÊäÈëĞÕÃû£º" << endl;
+	cout << "è¯·è¾“å…¥å§“åï¼š" << endl;
 	cin >> very;
 	p->changeMage(2, very);
-	cout << "ÇëÊäÈëc++³É¼¨£º" << endl;
+	cout << "è¯·è¾“å…¥c++æˆç»©ï¼š" << endl;
 	cin >> achieve;
 	p->changegrade(achieve);
 	system("cls");
-	cout << "ĞÅÏ¢ÊäÈëÍê±Ï" << endl;
+	cout << "ä¿¡æ¯è¾“å…¥å®Œæ¯•" << endl;
 
 	for (; tail->getNext() != '\0';)
 	{
@@ -110,11 +110,11 @@ void  construct_list(student *tail)
 	tail->afterInsert(p);
 }
 
-/*********²éÑ¯ĞÅÏ¢*********/
+/*********æŸ¥è¯¢ä¿¡æ¯*********/
 student *findmege(student *head)
 {
 loop:
-	cout << "1--°´ĞÕÃû²éÑ¯           2--°´Ñ§ºÅ²éÑ¯              q--·µ»ØÉÏÒ»¼¶²Ëµ¥" << endl;
+	cout << "1--æŒ‰å§“åæŸ¥è¯¢           2--æŒ‰å­¦å·æŸ¥è¯¢              q--è¿”å›ä¸Šä¸€çº§èœå•" << endl;
 	char p[5], ptr[20];
 	student *mid = head;
 	cin >> p;
@@ -122,7 +122,7 @@ loop:
 	if (p[0] != '1'&&p[0] != '2'&&p[0] != 'q' || strlen(p)>1)
 	{
 		system("cls");
-		cout << "¶Ô²»Æğ£¬ÄãµÄÊäÈëÓĞÎó£¬ÇëÖØĞÂÊäÈë£¡" << endl;
+		cout << "å¯¹ä¸èµ·ï¼Œä½ çš„è¾“å…¥æœ‰è¯¯ï¼Œè¯·é‡æ–°è¾“å…¥ï¼" << endl;
 		goto loop;
 	}
 
@@ -131,14 +131,14 @@ loop:
 	case '1':
 	{
 		system("cls");
-		cout << "ÇëÊäÈëÒª²éÕÒµÄĞÕÃû£º" << endl;
+		cout << "è¯·è¾“å…¥è¦æŸ¥æ‰¾çš„å§“åï¼š" << endl;
 		cin >> ptr;
 
 		for (; strcmp(ptr, mid->stu_name) != 0; mid = mid->getNext())
 		{
 			if (mid->getNext() == '\0')
 			{
-				cout << "¶Ô²»Æğ£¬ÄãÒª²éÕÒµÄÈË²»´æÔÚ£¬ÇëÈ·ÈÏÄãµÄÊäÈëÊÇ·ñÕıÈ·£¡" << endl;
+				cout << "å¯¹ä¸èµ·ï¼Œä½ è¦æŸ¥æ‰¾çš„äººä¸å­˜åœ¨ï¼Œè¯·ç¡®è®¤ä½ çš„è¾“å…¥æ˜¯å¦æ­£ç¡®ï¼" << endl;
 				goto loop;
 			}
 		}
@@ -147,13 +147,13 @@ loop:
 	case '2':
 	{
 		system("cls");
-		cout << "ÇëÊäÈëÄúÒª²éÕÒµÄÑ§ºÅ£º" << endl;
+		cout << "è¯·è¾“å…¥æ‚¨è¦æŸ¥æ‰¾çš„å­¦å·ï¼š" << endl;
 		cin >> ptr;
 		for (; strcmp(ptr, mid->stu_num) != 0; mid = mid->getNext())
 		{
 			if (mid->getNext() == '\0')
 			{
-				cout << "¶Ô²»Æğ£¬ÄúÒª²éÕÒµÄÄÚÈİ²»´æÔÚ£¬ÇëÈ·ÈÏÄúµÄÊäÈëÊÇ·ñÕıÈ·£¡" << endl;
+				cout << "å¯¹ä¸èµ·ï¼Œæ‚¨è¦æŸ¥æ‰¾çš„å†…å®¹ä¸å­˜åœ¨ï¼Œè¯·ç¡®è®¤æ‚¨çš„è¾“å…¥æ˜¯å¦æ­£ç¡®ï¼" << endl;
 				goto loop;
 			}
 		}
@@ -166,23 +166,23 @@ loop:
 	default:
 	{
 		system("cls");
-		cout << "¶Ô²»Æğ£¬ÄúµÄÊäÈëÓĞÎó£¬ÇëÖØĞÂÊäÈë£¡" << endl;
+		cout << "å¯¹ä¸èµ·ï¼Œæ‚¨çš„è¾“å…¥æœ‰è¯¯ï¼Œè¯·é‡æ–°è¾“å…¥ï¼" << endl;
 		goto loop;
 	}
 	}
 }
 
-/******************É¾³ıÁ´±í ½Úµã***********************/
+/******************åˆ é™¤é“¾è¡¨ èŠ‚ç‚¹***********************/
 void delete_list(student *head)
 {
 	student *p = '\0';
 	char selet[4];
 	system("cls");
-	cout << "ÔÚÉ¾³ıÇ°£¬ÏµÍ³»á¸ù¾İÄúµÄÌáÊ¾ÕÒµ½ÄúÒªÉ¾³ıµÄÑ§ÉúĞÅÏ¢£¡" << endl;
+	cout << "åœ¨åˆ é™¤å‰ï¼Œç³»ç»Ÿä¼šæ ¹æ®æ‚¨çš„æç¤ºæ‰¾åˆ°æ‚¨è¦åˆ é™¤çš„å­¦ç”Ÿä¿¡æ¯ï¼" << endl;
 	p = findmege(head);
 	if (p != '\0')
 	{
-		cout << "È·ÈÏÒªÉ¾³ıÂğ£¨yes/ÈÎÒâ¼ü·µ»Ø£©" << endl;
+		cout << "ç¡®è®¤è¦åˆ é™¤å—ï¼ˆyes/ä»»æ„é”®è¿”å›ï¼‰" << endl;
 		cin >> selet;
 
 		if (strcmp(selet, "yes") == 0)
@@ -190,36 +190,36 @@ void delete_list(student *head)
 			for (; head->getNext() != p; head = head->getNext());
 			head->afterDelete();
 			system("cls");
-			cout << "¸ÃĞÅÏ¢É¾³ı³É¹¦£¡" << endl;
+			cout << "è¯¥ä¿¡æ¯åˆ é™¤æˆåŠŸï¼" << endl;
 		}
 	}
 }
 
-/*******************ĞŞ¸Ä½ÚµãĞÅÏ¢********************/
+/*******************ä¿®æ”¹èŠ‚ç‚¹ä¿¡æ¯********************/
 void change_info(student *head)
 {
 	system("cls");
-	cout << "ÔÚÄúĞŞ¸ÄÇ°£¬ÏµÍ³»á¸ù¾İÄúÌá¹©µÄĞÅÏ¢ÕÒµÄÄúÒªĞŞ¸ÄµÄĞÅÏ¢£º" << endl;
+	cout << "åœ¨æ‚¨ä¿®æ”¹å‰ï¼Œç³»ç»Ÿä¼šæ ¹æ®æ‚¨æä¾›çš„ä¿¡æ¯æ‰¾çš„æ‚¨è¦ä¿®æ”¹çš„ä¿¡æ¯ï¼š" << endl;
 	student *p = '\0';
 
 	float achieve;
 	p = findmege(head);
 	if (p != '\0')
 	{
-		cout << "ÇëÊäÈëc++³É¼¨:" << endl;
+		cout << "è¯·è¾“å…¥c++æˆç»©:" << endl;
 		cin >> achieve;
 		p->changegrade(achieve);
 		system("cls");
-		cout << "ĞŞ¸Ä³É¹¦!" << endl;
+		cout << "ä¿®æ”¹æˆåŠŸ!" << endl;
 	}
 
 }
 
-/**************Êä³öÑ§Éú³É¼¨ĞÅÏ¢**************/
+/**************è¾“å‡ºå­¦ç”Ÿæˆç»©ä¿¡æ¯**************/
 void output(student *head)
 {
 	system("cls");
-	cout << "1-²é¿´Ö¸¶¨Ñ§ÉúĞÅÏ¢£»2-²é¿´ËùÓĞÑ§ÉúĞÅÏ¢£»3-·Ö¶ÎÊä³öÑ§ÉúĞÅÏ¢" << endl;
+	cout << "1-æŸ¥çœ‹æŒ‡å®šå­¦ç”Ÿä¿¡æ¯ï¼›2-æŸ¥çœ‹æ‰€æœ‰å­¦ç”Ÿä¿¡æ¯ï¼›3-åˆ†æ®µè¾“å‡ºå­¦ç”Ÿä¿¡æ¯" << endl;
 	char ch;
 	int n = 0;
 	head = head->getNext();
@@ -242,7 +242,7 @@ void output(student *head)
 		}
 		break;
 	case '3':
-		cout << "a-60·ÖÒÔÏÂ£»b-60~70·ÖÖ®¼ä£»c-70~80·ÖÖ®¼ä£»d-80~90·ÖÖ®¼ä£»e-90~100·ÖÖ®¼ä£º" << endl;
+		cout << "a-60åˆ†ä»¥ä¸‹ï¼›b-60~70åˆ†ä¹‹é—´ï¼›c-70~80åˆ†ä¹‹é—´ï¼›d-80~90åˆ†ä¹‹é—´ï¼›e-90~100åˆ†ä¹‹é—´ï¼š" << endl;
 		cin >> ch;
 		switch (ch)
 		{
@@ -303,12 +303,12 @@ void output(student *head)
 		}
 		if (n == 0)
 		{
-			cout << "¸Ã·Ö¶ÎÄÚÃ»ÓĞÄúÒªÕÒµÄÑ§ÉúĞÅÏ¢" << endl;
+			cout << "è¯¥åˆ†æ®µå†…æ²¡æœ‰æ‚¨è¦æ‰¾çš„å­¦ç”Ÿä¿¡æ¯" << endl;
 		}
 	}
 }
 
-/*****************Ö÷²Ëµ¥************************/
+/*****************ä¸»èœå•************************/
 void mainmenu(student *head)
 {
 	char selet[10];
@@ -317,17 +317,17 @@ void mainmenu(student *head)
 	ifstream infile;
 	student *p, *ptr;
 	student *test = head, *mid;
-	cout << "*************************»¶Ó­½øÈëÑ§ÉúĞÅÏ¢¹ÜÀíÏµÍ³*************************" << endl;
+	cout << "*************************æ¬¢è¿è¿›å…¥å­¦ç”Ÿä¿¡æ¯ç®¡ç†ç³»ç»Ÿ*************************" << endl;
 	do {
 		cout << "**************************************************************************" << endl;
-		cout << "1.²åÈëĞÅÏ¢£»   2.É¾³ıĞÅÏ¢£»  3.ĞŞ¸ÄĞÅÏ¢£» 4.²é¿´ĞÅÏ¢£» 5.±£´æ  " << endl;
-		cout << "°´'q'¼üÍË³ö      " << endl;
+		cout << "1.æ’å…¥ä¿¡æ¯ï¼›   2.åˆ é™¤ä¿¡æ¯ï¼›  3.ä¿®æ”¹ä¿¡æ¯ï¼› 4.æŸ¥çœ‹ä¿¡æ¯ï¼› 5.ä¿å­˜  " << endl;
+		cout << "æŒ‰'q'é”®é€€å‡º      " << endl;
 		cout << "**************************************************************************" << endl;
 		cin >> selet;
 		if (((selet[0]<'1' || selet[0]>'6') && selet[0] != 'q') || strlen(selet)>1)
 		{
 			system("cls");
-			cout << "ÄúµÄÊäÈëÓĞÎó£¬ÇëÖØĞÂÊäÈë£¡" << endl;
+			cout << "æ‚¨çš„è¾“å…¥æœ‰è¯¯ï¼Œè¯·é‡æ–°è¾“å…¥ï¼" << endl;
 			break;
 		}
 		switch (selet[0])
@@ -356,7 +356,7 @@ void mainmenu(student *head)
 			}
 			outfile.close();
 			system("cls");
-			cout << "±£´æ³É¹¦£¡" << endl;
+			cout << "ä¿å­˜æˆåŠŸï¼" << endl;
 			break;
 		case 'q':
 			break;
