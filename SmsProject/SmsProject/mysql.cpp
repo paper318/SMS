@@ -1,6 +1,7 @@
 #include"mysql.hpp"
+
 MYSQL myobj;
-string comma = ",", plus = "+", quote = "\"", space = " ", lb = "(", rb = ")", semi = ";";
+string comma = ",", plus = "+", quote = "\"", space = " ", lb = "(", rb = ")", semi = ";",colon= ":",hyphen="-";
 
 
 //初始化数据库
@@ -38,6 +39,18 @@ void closeDB() {
 	mysql_close(&myobj);
 	mysql_server_end();
 }
+//使用数据库
+void UseDB(const char * sqlstr) {
+
+	if (mysql_select_db(&myobj, sqlstr) == 0)
+	{
+		cout << "use database" << sqlstr << endl;
+	}
+	else {
+		cout << "不存在相关数据库" << endl;
+	}
+
+}
 //不带成功信息的Query
 int Query(const char * sqlstr) {
 	int status = mysql_query(&myobj, sqlstr);
@@ -52,6 +65,20 @@ int Query(const char * sqlstr) {
 
 	return 0;//成功
 
+}
+//导出的查询
+int Query(const char* sqlstr,fstream* fp) {
+	int status = mysql_query(&myobj, sqlstr);
+	if (status>0)//非0失败
+	{
+		cout << "Query failed" << endl;
+		mysql_close(&myobj);
+		return 1;
+	}
+	cout << "Query success" << endl;
+	GetStoreData(status,fp);
+
+	return 0;//成功
 }
 
 //给Query传递信息了
@@ -145,6 +172,37 @@ int GetStoreData(int status,int token) {
 
 }
 
+//进行导出文件的
+void GetStoreData(int status, fstream* fp) {
+	MYSQL_RES *result = NULL;
+	do {
+		result = mysql_store_result(&myobj);
+		if (result) {
+			process_result_set(result, fp);
+			mysql_free_result(result);
+		}
+		else {
+			if (mysql_field_count(&myobj) == 0) {
+				cout << mysql_affected_rows(&myobj) << " rows affected\n";
+			}
+			else {
+				cout << "error \n";
+				break;
+			}
+		}
+		if ((status = mysql_next_result(&myobj)) > 0)
+			/*		返回值	描述
+			0	成功，并有更多的结果
+			- 1	成功，没有更多的结果
+			> 0	发生错误*/
+			cout << "could not execute statement\n";
+
+	} while (status == 0);
+
+}
+
+
+
 //返回的是对函数查询成功与否进行判断，不打印文字
 int process_result_set(MYSQL_RES* result,int token) {
 	string a = "success";
@@ -157,6 +215,8 @@ int process_result_set(MYSQL_RES* result,int token) {
 			return -1;//-1表示fail
 	}
 }
+
+
 //一般的对查询结果的打印
 void process_result_set(MYSQL_RES * result) {
 	int rowcount = mysql_num_rows(result);
@@ -189,14 +249,37 @@ void process_result_set(MYSQL_RES * result) {
 		row = mysql_fetch_row(result);
 	}
 }
-void UseDB(const char * sqlstr) {
 
-	if (mysql_select_db(&myobj, sqlstr) == 0)
-	{
-		cout << "use database" << sqlstr << endl;
-	}
-	else {
-		cout << "不存在相关数据库" << endl;
-	}
 
+//输出到文件中
+void process_result_set(MYSQL_RES * result, fstream fp) {
+	int rowcount = mysql_num_rows(result);
+	//	fp << "row count:" << rowcount << endl;
+	//打印字段名称
+	MYSQL_FIELD *field = NULL;
+	int fieldcount = mysql_num_fields(result);
+	for (int i = 0; i < fieldcount; i++) {
+		fp << "_______________";
+	}
+	fp << endl;
+	for (unsigned int i = 0; i < fieldcount; i++) {
+		field = mysql_fetch_field_direct(result, i);
+		fp << setiosflags(ios::left) << setw(14) << field->name;
+	}
+	fp << endl;
+	//打印各行
+	for (int i = 0; i < fieldcount; i++) {
+		fp << "_______________";
+
+	}
+	fp << endl;
+	MYSQL_ROW row = NULL;
+	row = mysql_fetch_row(result);//一行一行获取直到没有
+	while (NULL != row) {
+		for (int i = 0; i < fieldcount; i++) {
+			fp << setiosflags(ios::left) << setw(14) << row[i];
+		}
+		fp << endl;
+		row = mysql_fetch_row(result);
+	}
 }
