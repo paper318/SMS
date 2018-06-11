@@ -1,1 +1,9 @@
-﻿  main.cpp
+﻿  View.cpp
+  student.hpp
+c:\users\james\desktop\sms\smsproject\smsproject\student.hpp(25): error C2143: 语法错误: 缺少“;”(在“}”的前面)
+c:\users\james\desktop\sms\smsproject\smsproject\student.hpp(25): error C2182: “Getid”: 非法使用“void”类型
+  SelectClass.cpp
+  OpenClass.cpp
+  Grade.cpp
+  Exam.cpp
+  正在生成代码...

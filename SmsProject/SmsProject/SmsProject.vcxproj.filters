@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="源文件\NewFilter1">
-      <UniqueIdentifier>{c9e26540-4c94-4905-85bf-d8eb7c2e0880}</UniqueIdentifier>
-    </Filter>
     <Filter Include="头文件\people">
       <UniqueIdentifier>{e639f138-ad78-48de-8a88-bc33696f8716}</UniqueIdentifier>
     </Filter>
@@ -24,6 +21,21 @@
     </Filter>
     <Filter Include="头文件\View">
       <UniqueIdentifier>{be4393c5-02c0-4978-af1a-3643159e340a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Management">
+      <UniqueIdentifier>{6e1b6cdc-e09f-473e-bfaf-de4335f35b8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\people">
+      <UniqueIdentifier>{42188fd9-71da-4029-b602-5a6cb95a0a5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\View">
+      <UniqueIdentifier>{3e5bd87c-b2ad-471a-8988-e9f8fffadb82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Mysql">
+      <UniqueIdentifier>{4b0ce881-5165-49a1-8f8b-f74de9ef2137}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Mysql">
+      <UniqueIdentifier>{e54bcae8-cc77-4c06-8b1f-3c1f096a564d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -36,6 +48,36 @@
     <ClCompile Include="student.hpp">
       <Filter>头文件\people</Filter>
     </ClCompile>
+    <ClCompile Include="Exam.cpp">
+      <Filter>源文件\Management</Filter>
+    </ClCompile>
+    <ClCompile Include="Grade.cpp">
+      <Filter>源文件\Management</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenClass.cpp">
+      <Filter>源文件\Management</Filter>
+    </ClCompile>
+    <ClCompile Include="SelectClass.cpp">
+      <Filter>源文件\Management</Filter>
+    </ClCompile>
+    <ClCompile Include="View.cpp">
+      <Filter>源文件\View</Filter>
+    </ClCompile>
+    <ClCompile Include="leader.cpp">
+      <Filter>源文件\people</Filter>
+    </ClCompile>
+    <ClCompile Include="manager.cpp">
+      <Filter>源文件\people</Filter>
+    </ClCompile>
+    <ClCompile Include="student.cpp">
+      <Filter>源文件\people</Filter>
+    </ClCompile>
+    <ClCompile Include="teacher.cpp">
+      <Filter>源文件\people</Filter>
+    </ClCompile>
+    <ClCompile Include="mysql.cpp">
+      <Filter>源文件\Mysql</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="leader.hpp">
@@ -44,20 +86,26 @@
     <ClInclude Include="teacher.hpp">
       <Filter>头文件\people</Filter>
     </ClInclude>
-    <ClInclude Include="SelectClass.h">
+    <ClInclude Include="Enrollment.hpp">
       <Filter>头文件\Management</Filter>
     </ClInclude>
-    <ClInclude Include="OpenClass.h">
+    <ClInclude Include="Exam.hpp">
       <Filter>头文件\Management</Filter>
     </ClInclude>
-    <ClInclude Include="Enrollment.h">
+    <ClInclude Include="Grade.hpp">
       <Filter>头文件\Management</Filter>
     </ClInclude>
-    <ClInclude Include="Grade.h">
+    <ClInclude Include="OpenClass.hpp">
       <Filter>头文件\Management</Filter>
     </ClInclude>
-    <ClInclude Include="Exam.h">
+    <ClInclude Include="SelectClass.hpp">
       <Filter>头文件\Management</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql.hpp">
+      <Filter>头文件\Mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="view.hpp">
+      <Filter>头文件\View</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
