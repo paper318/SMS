@@ -29,7 +29,12 @@ void ModifyClass(string stu_id, string cls);
 //分班调整，（学生更改班）
 void GetClass(); //分班的情况 （各班人 ，姓名）
 
-
+//排课程表
+void ScheduleSetByStu(string sid, string cid, string start, string stop, string day) {//对特定学号排课
+void ScheduleSetByCls(string dep, string grd, string cls, string cid, string start, string stop, string day, vector<string>&data) {//对一个班排课
+void ScheduleSetByCid(string cid, string start, string stop, string day, vector<string>&data) {//对一个班排课 cid为courseid
+void SelectStuSameCls(string dep, string grd, string cls, vector<string>&data) {//选出同一个班的所有学生
+void SelectStuSameCid(string cid, vector<string>&data) {//选出同一个course的所有人
 
 
 extern int stu_count;//学生数统计，便于学号的编写
