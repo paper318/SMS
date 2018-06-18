@@ -1,5 +1,6 @@
 #include"OpenClass.hpp"
 #include"mysql.hpp"
+#include<vector>
 #include<fstream>
 #include<sstream>
 using namespace std;
@@ -94,4 +95,40 @@ void GetClass() {//分班的情况 （各班人 ，姓名）
 	string str = "call GetClass()";
 	Query(str.c_str());
 }
-void SetSchedule();//排课并制定课程表 这个太骚了。。 fucku bitch
+
+
+
+void ScheduleSetByStu(string sid,string cid,string start,string stop,string day) {//对特定学号排课
+	string str = "call ScheduleSetByStu(";
+	str += quote + sid + quote + comma + quote + cid + quote + comma + quote + start + quote + comma + quote + stop + quote + comma + day + rb + semi;
+	Query(str.c_str());
+}
+
+void ScheduleSetByCls(string dep, string grd, string cls, string cid, string start, string stop, string day,vector<string>&data) {//对一个班排课
+	SelectStuSameCls(dep,grd,cls,data);
+	for (auto sid : data) {//对应得到的每一个sid都插入相应的时间表
+		string str = "call ScheduleSetByStu(";
+		str += quote + sid + quote + comma + quote + cid + quote + comma + quote + start + quote + comma + quote + stop + quote + comma + day + rb + semi;
+		Query(str.c_str());
+	}
+}
+void ScheduleSetByCid(string cid, string start, string stop, string day, vector<string>&data) {//对一个班排课 cid为courseid
+	SelectStuSameCid(cid, data);
+	for (auto sid : data) {//对应得到的每一个sid都插入相应的时间表
+		string str = "call ScheduleSetByStu(";
+		str += quote + sid + quote + comma + quote + cid + quote + comma + quote + start + quote + comma + quote + stop + quote + comma + day + rb + semi;
+		Query(str.c_str());
+	}
+}
+
+void SelectStuSameCls(string dep,string grd ,string cls,vector<string>&data ) {//选出同一个班的所有学生
+	string str = "call SelectStuSameCls(";
+	str  += quote + dep + quote + comma + quote + grd + quote + comma + quote + cls + quote + rb + semi;
+	Query(str.c_str(),data);
+}
+
+void SelectStuSameCid(string cid, vector<string>&data) {//选出同一个course的所有人
+	string str = "call SelectStuSameCid(";
+	str += quote + cid + quote + rb + semi;
+	Query(str.c_str(), data);
+}

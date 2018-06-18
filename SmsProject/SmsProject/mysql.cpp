@@ -1,5 +1,6 @@
 #include"mysql.hpp"
-
+#include<vector>
+#include<iostream>
 MYSQL myobj;
 string comma = ",", plus = "+", quote = "\"", space = " ", lb = "(", rb = ")", semi = ";",colon= ":",hyphen="-";
 
@@ -107,11 +108,28 @@ int Query(const char * sqlstr,int token) {
 		return 1;
 	}
 	cout << "Query success" << endl;
-	GetStoreData(status,token);
+	tag = GetStoreData(status,token);
 
 	return tag;//0表示query成功 2表示查询func结果return success -1 表示func返回无效
 
 }
+//将查询结果打包成向量。返回
+int Query(const char * sqlstr, vector<string> &data) {
+	int status = mysql_query(&myobj, sqlstr);
+	if (status>0)//非0失败
+	{
+		cout << "Query failed" << endl;
+		mysql_close(&myobj);
+		return 1;
+	}
+	cout << "Query success" << endl;
+	GetStoreData(status,data);
+
+	return 0;//成功
+}
+
+
+
 
 //正常对返回信息处理
 void GetStoreData(int status) {
@@ -169,6 +187,35 @@ int GetStoreData(int status,int token) {
 
 	} while (status == 0);
 	return tag;
+
+}
+
+//需要返回数据库查询后的向量数据
+void GetStoreData(int status, vector <string>&data) {
+	MYSQL_RES *result = NULL;
+	do {
+		result = mysql_store_result(&myobj);
+		if (result) {
+			process_result_set(result, data);
+			mysql_free_result(result);
+		}
+		else {
+			if (mysql_field_count(&myobj) == 0) {
+				cout << mysql_affected_rows(&myobj) << " rows affected\n";
+			}
+			else {
+				cout << "error \n";
+				break;
+			}
+		}
+		if ((status = mysql_next_result(&myobj)) > 0)
+			/*		返回值	描述
+			0	成功，并有更多的结果
+			- 1	成功，没有更多的结果
+			> 0	发生错误*/
+			cout << "could not execute statement\n";
+
+	} while (status == 0);
 
 }
 
@@ -250,36 +297,59 @@ void process_result_set(MYSQL_RES * result) {
 	}
 }
 
+//返回向量的数据处理
+void process_result_set(MYSQL_RES * result,vector<string>&data) {
+	int rowcount = mysql_num_rows(result);
+//	cout << "row count:" << rowcount << endl;
+	//打印字段名称
+	MYSQL_FIELD *field = NULL;
+	int fieldcount = mysql_num_fields(result);
+
+	//for (unsigned int i = 0; i < fieldcount; i++) {
+	//	field = mysql_fetch_field_direct(result, i);
+	//	//cout << setiosflags(ios::left) << setw(14) << field->name;
+	//}
+	MYSQL_ROW row = NULL;
+	row = mysql_fetch_row(result);//一行一行获取直到没有
+	while (NULL != row) {
+		for (int i = 0; i < fieldcount; i++) {
+			data.push_back(row[i]);
+		}
+		cout << endl;
+		row = mysql_fetch_row(result);
+	}
+
+}
 
 //输出到文件中
-void process_result_set(MYSQL_RES * result, fstream fp) {
+void process_result_set(MYSQL_RES * result, fstream*fp) {
 	int rowcount = mysql_num_rows(result);
 	//	fp << "row count:" << rowcount << endl;
 	//打印字段名称
 	MYSQL_FIELD *field = NULL;
 	int fieldcount = mysql_num_fields(result);
 	for (int i = 0; i < fieldcount; i++) {
-		fp << "_______________";
+		*fp << "_______________";
 	}
-	fp << endl;
+	*fp << endl;
 	for (unsigned int i = 0; i < fieldcount; i++) {
 		field = mysql_fetch_field_direct(result, i);
-		fp << setiosflags(ios::left) << setw(14) << field->name;
+		*fp << setiosflags(ios::left) << setw(14) << field->name;
 	}
-	fp << endl;
+	*fp << endl;
 	//打印各行
 	for (int i = 0; i < fieldcount; i++) {
-		fp << "_______________";
+		*fp << "_______________";
 
 	}
-	fp << endl;
+	*fp << endl;
 	MYSQL_ROW row = NULL;
 	row = mysql_fetch_row(result);//一行一行获取直到没有
 	while (NULL != row) {
 		for (int i = 0; i < fieldcount; i++) {
-			fp << setiosflags(ios::left) << setw(14) << row[i];
+			*fp << setiosflags(ios::left) << setw(14) << row[i];
 		}
-		fp << endl;
+		*fp << endl;
 		row = mysql_fetch_row(result);
 	}
 }

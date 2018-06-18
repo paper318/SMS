@@ -28,5 +28,11 @@ int GetStoreData(int status, int token); //返回查询 true or false的
 
 
 int Query(const char* sqlstr, fstream *fp); //导出的查询
-void process_result_set(MYSQL_RES * result, fstream fp);//输出文件中
+void process_result_set(MYSQL_RES * result, fstream*fp);//输出文件中
 void GetStoreData(int status, fstream *fp);//输出文件						 
+
+
+
+int Query(const char * sqlstr, vector<string> &data);//将查询结果打包成向量。返回
+void GetStoreData(int status, vector <string>&data);
+void process_result_set(MYSQL_RES * result, vector<string>&data);
