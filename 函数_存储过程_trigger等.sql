@@ -1,11 +1,28 @@
+--系
+create table department
+( name nvarchar(20), 
+  dep_id nvarchar(20) not null primary key,
+ );
+ 
+ 
+ --班
+ create table class
+(	dep_id nvarchar(200,
+	class_id nvarchar(20) not null primary key,
+)
+
+
 -- 学生
 create table student(
-stu_id nvarchar(20) not null primary key ,
-name nvarchar(20),
-passwd nvarchar(20),
-class int,
-Grade int,
 department nvarchar(20),--系
+class_id int,
+Grade int,
+name nvarchar(20),
+stu_id nvarchar(20) not null primary key ,
+passwd nvarchar(20),
+school_roll nvarchar(20)  --学籍状态（开除，休学，留级等）
+major_status nvarchar(20) --专业变动
+
 );
 -- 老师
 create table teacher(
@@ -35,14 +52,18 @@ closet datetime,
 credit numeric(10.2),
 tea_id nvarchar(20) ,
 num int,
-primary key (tea_id,course_id)  --？？？和选课联系有问题，这个表可以是(张老师，course_id),(李老师,course_id),对于学生而言，根据course_id查询他的任课老师会出问题
-);                              --？？？对于老师查询自己的学生也有问题，因为不仅张老师的学生和李老师的学生可能有相同的course_id
---选课     ？？course_id 不唯一标识一门课程，则有歧义，如可能是通院自己院的大物，也可能是全校统考的大物；有可能是本院张老师的课，也有可能是李老师的课；否则必须假定course_id唯一标识一门课程
+course_type nvarchar(20),
+primary key (tea_id,course_id) 
+);                              
+
+--选课     
 create table sec(
 stu_id nvarchar(20) not null,
 course_id nvarchar(20) not null,
-primary key(stu_id,course_id)
+tea_id nvarchar(20)
+primary key(stu_id,course_id,tea_id)
 )
+
 -- 成绩
 create table grade(
 stu_id nvarchar(20) not null,
@@ -57,7 +78,7 @@ name nvarchar(50) ,
 num int
 );
 -- 课程表
-create table schedule(  可以根据班级统一排课(根据stu_id找到班级，同一个的排一个课)，也可以根据学生排课(根据stu_id单独设置)，也可以根据课程排课(选择有这个课的所有学生，进行加课)
+create table schedule  --可以根据班级统一排课(根据stu_id找到班级，同一个的排一个课)，也可以根据学生排课(根据stu_id单独设置)，也可以根据课程排课(选择有这个课的所有学生，进行加课)
 stu_id nvarchar(20),
 course_name nvarchar(20),
 time_start datetime,
@@ -84,8 +105,8 @@ name nvarchar(20)
 
 
 
-？？？？？？？？
-生成考试安排表的思路如下：
+
+--生成考试安排表的思路如下：
 教室一个时间段内能使用的时间一定（需要一个表classroom 记录教室数量如（room_id,limit_num）），全校所有科目需要考试的时间一定，
 所有排法应该是用一个表记录每个需要考试的科目（course表大致能实现这个功能，需要的信息（课程id,class）注意一个班按人数可以能需要填入多个相同的信息，比如150人的一个班考大物，则需要填入3个相同的信息段，分成3个部分，因此可以再补充1,2，3数字，与前面两个字段合并成主码）
 以时间顺序开始分配，可以采用下列规则:
@@ -118,20 +139,25 @@ start++;  //进入下一个时间段
 
 最后生成的表应该为
 
-
 -- 考试
 create table test(
 room_id nvarchar(20) not null primary key, 
 limit_num numeric(10.2),
-course_name //新增
-class_id    //新增
-// 删除 supervisor nvarchar(20),  删除是因为在上面那个复杂的过程中，没有必要再增加这个难度，完全可以放到这个表生成后，再根据这个表去生成
+course_name 
+class_id    
 time_start datetime,  
 time_stop datetime
-)
+);
 
 
---监考教师表
+--监考教师表 根据test 表用存储过程生成
+--表结构如下：
+create table invigilator
+( tea_id nvarchar(20),
+  room_id nvarchar(20),
+  time_start datetime,
+  time_stop datetime,
+ );
 
 还是一个填空格的游戏，对应考试表里的每一行数据，都得安排一个老师监考，同一个时间段内，一名老师只能监考一个考试
 过程是这样的：
@@ -143,31 +169,16 @@ time_stop datetime
 同一个科目的考生是确定、考场能容纳的最大数量、能提供的监考老师都是安排前都已经知道的，这种失衡无法改变，但每个时间段安排的考场数却能根据前面3个设定一个合理
 的上限。提前设置上限，非常有必要。
 
+--学生考试表 根据test生成
+--表的结构如下
+create table stu_test
+( name nvarchar(200),
+  room_id nvarchar(20),
+  time_start datetime,
+  time_stop datetime,
+ )
 
--- 考试
-create table test(
-room_id nvarchar(20) not null primary key,
-limit_num numeric(10.2),
-supervisor nvarchar(20),
-time_start datetime,  
-time_stop datetime
-)
-
-
-学生想要查询自己的考试安排的话，直接从考试表中找到自己的班级就知道了；
-
-
-???考试房间这个表的意义不是很大，完全可以合并在考试安排表里，原文文档的操作要求其实就是生成考试安排表，而“实现考试教教室”是指避免考试教室出现冲突？？？
-
-
--- 考试房间
-create table room(
-stu_id nvarchar(20) not null primary key,
-room_id nvarchar(20) references test(room_id)
-)
-
-
---教学计划  ？？？不理解这个表是干什么用的
+--教学计划  
 create table poject(
 course_id nvarchar(20), 
 tea_id nvarchar(20),
