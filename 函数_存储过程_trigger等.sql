@@ -14,7 +14,7 @@ create table department
 
 -- 学生
 create table student(
-department nvarchar(20),--系
+dep_id nvarchar(20),--系
 class_id int,
 Grade int,
 name nvarchar(20),
@@ -34,6 +34,7 @@ passwd nvarchar(20),
 create table leader(
 lea_id nvarchar(20) not null primary key,
 name nvarchar(20),
+dep_id nvarchar(20),
 passwd nvarchar(20)
 );
 -- 管理员
@@ -80,10 +81,12 @@ num int
 -- 课程表
 create table schedule  --可以根据班级统一排课(根据stu_id找到班级，同一个的排一个课)，也可以根据学生排课(根据stu_id单独设置)，也可以根据课程排课(选择有这个课的所有学生，进行加课)
 stu_id nvarchar(20),
-course_name nvarchar(20),
+name nvarchar(20),
 time_start datetime,
 time_stop datetime,
-day int
+tea_id nvarchar(20)
+class_time int,
+
 );
 -- 奖励
 create table award(
@@ -189,16 +192,16 @@ msg TEXT
 -- 学生
 		-- //学生登录
 		delimiter //
-		create function PasswdStu(identity nvarchar(20), nvarchar(20))
+		create function PasswdStu(id nvarchar(20), key nvarchar(20))
 			returns nvarchar(50)
 			begin 
 				if(id in
-					(select id from student where passwd =  and identity= id
+					(select stu_id from student where passwd =unknowkey and stu_id=id
 					))
 				then return "Success";
 				else
 				return "Failed";
-				end if;能
+				end if;
 			end //
 		delimiter ;
 
@@ -221,7 +224,138 @@ msg TEXT
 			end //
 		delimiter ;
 
+--老师
 
+		--//老师登录
+		delimiter //
+		create function PasswdTea(id nvarchar(20), key nvarchar(20))
+			returns nvarchar(50)
+			begin 
+				if(id in
+					(select tea_id from teacher where passwd =key and tea_id=id
+					))
+				then return "Success";
+				else
+				return "Failed";
+				end if;能
+			end //
+		delimiter 
+		
+		--//查询所有学生情况（选了这门课的学生们的一些信息，如学号，姓名，班级，成绩）
+		delimiter //
+		create procedure TeaQueryStu(id nvarchar(20))
+		begin
+			select sec.course_id,student.stu_id,student.name,stuedent.class_id,
+			from  sec join student on (sec.stu_id=student.stu_id)
+			where (sec.tea_id=identity)
+			group by student.class_id;
+		end //
+		delimiter ;
+		
+		
+		--//开课统计，(开了哪些课，每个选课人数)
+		delimiter //
+		create procedure TeaCourseStat(id nvarchar(20))
+		begin
+			select course.course_id, course.course_name, sum(stu_id),course.
+			from sec join course on(course.tea_id=sec.tea_id and course.course_id=sec.course_id)
+			where (course.tea_id=id)
+			group by course.course_id;
+		end //
+		delimiter ;
+		
+		--//查询自己的教学班级，教学时间
+		delimiter //
+		create procedure worktime(id nvarchar(20))
+		begin
+			select course_id,class_id,class_time,time_start,time_stop
+			from schedule join student on(student.stu_id=schedule.stu_id)
+			where(schedule.tea_id=id)
+		end //
+		delimiter ;
+		
+
+--领导
+		--//登录
+		delimiter //
+		create function PasswdTea(id nvarchar(20), key nvarchar(20))
+			returns nvarchar(50)
+			begin 
+				if(id in
+					(select lea_id from leader where passwd =key and tea_id=id
+					))
+				then return "Success";
+				else
+				return "Failed";
+				end if;能
+			end //
+		delimiter
+
+		--//获得登录领导的所在系dep_id
+		delimiter //
+		create procedure getdep_id(id nvarchar(20)
+		begin
+			select lep__id
+			from leader
+			where(lea_id=id);
+		end //
+		delimiter ;
+		
+		
+		
+		--//查询本院学生人数
+		delimiter //
+		create procedure StudentCount(id nvarchar(20))
+		begin
+			select class_id,sum(stu_id)
+			from student join leader on(student.dep_id=leader.dep_id)
+			where(student.dep_id=id)
+			group by class_id;
+		end //
+		delimiter ;
+		
+		--//查询本院的开课统计(开了哪些课，每个选课人数)
+		delimiter //
+		create procedure LeaCourseStat(id nvarchar(20))
+		begin
+			select course.tea_id,teacher.name,course.course_id,course.name,sum(sec.stu_id)
+			from sec join student on(sec.stu_id=student.stu_id)
+			   right join course on(sec.course_id=course.course_id and sec.tea_id=course.tea_id)
+					 join teacher on(teacher.tea_id=course.tea_id)
+					 join leader on(teacher.dep_id=leader.dep_id)
+			where(leader.dep_id=id)
+			group by course.course_id;
+			
+		end //
+		delimiter ;
+		
+		--//按课程名查询老师相关信息
+		delimiter //
+		create procedure LeaQueryTea(coursename nvarchar(20),depid nvarchar(20))
+		begin
+			select course.course_id,course.name,course.tea_id,teacher.name
+			from teacher join course on(teacher.tea_id=course.tea_id)
+			where(course.name=coursename and teacher.dep_id=depid)
+		end //
+		delimiter ;
+		
+		--//按学生学号查询学生的相关信息(班级，选课等)
+		delimiter //
+		create procedure LeaQueryStu(id nvarchar(20))
+		begin
+			select student.name,student.stu_id,student.classs_id,sec.course_id
+			from student join sec on(student.stu_id=sec.stu_id)
+			where(student.stu_id=id)
+		end //
+		delimiter ;
+		
+		
+			
+		
+		
+		
+		
+	
 
 --选课管理
 

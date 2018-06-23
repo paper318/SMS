@@ -1,7 +1,3 @@
-
-
-
-
 #ifndef LEADER_H_
 #define LEADER_H_
 
@@ -17,12 +13,12 @@ public:
 	Leader(string a, string b) :id(a), password(b) {};
 	~Leader() {};
 
-	void Load(string id, string password);//µÇÂ¼
-	void StudentCount();//Ñ§ÉúÈËÊı
-	void CourseStat();//¿ª¿ÎÍ³¼Æ£¬(¿ªÁËÄÄĞ©¿Î£¬Ã¿¸öÑ¡¿ÎÈËÊı)
-					  //ÈÎ¿Î½ÌÊ¦¿ÉÒÔ²éÑ¯×Ô¼º¿ªÉèµÄ¿Î³Ì£¬²¢½øĞĞºË×¼È·ÈÏ¡£Ôİ²»ÊµÏÖ£¬²»ºÃ²âÊÔ  
-	void QueryTeacher();//ÊäÈë¿Î³Ì»òµÃµ½ÀÏÊ¦ºÍÀÏÊ¦Ïà¹ØĞÅÏ¢
-	void QueryStudent();//»ñµÃÖ¸¶¨Ñ§ÉúµÄÏà¹ØĞÅÏ¢
+	int Load();//ç™»å½•
+	string getdep_id(); //è·å¾—è¯¥é™¢é¢†å¯¼dep_id;
+	void StudentCount();//æŸ¥è¯¢æ•´ä¸ªé™¢çš„å­¦ç”Ÿäººæ•°
+	void LeaCourseStat();//æŸ¥è¯¢æ•´ä¸ªé™¢çš„å¼€è¯¾ç»Ÿè®¡ï¼Œ(å¼€äº†å“ªäº›è¯¾ï¼Œæ¯ä¸ªé€‰è¯¾äººæ•°) 
+	int LeaQueryTea(string coursename);//è¾“å…¥è¯¾ç¨‹æˆ–å¾—åˆ°è€å¸ˆå’Œè€å¸ˆç›¸å…³ä¿¡æ¯
+	void LeaQueryStu(string stu_id);//è·å¾—æŒ‡å®šå­¦ç”Ÿçš„ç›¸å…³ä¿¡æ¯
 };
 
 

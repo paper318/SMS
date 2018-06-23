@@ -2,11 +2,11 @@
 #define class_h_
 
 #include<string>
-#include"mysql.hpp"
+#include"MyownSQL.hpp"
 using namespace std;
 
-extern int open_time;//Ñ¡¿Î¿ª·ÅÊ±¼ä
-extern int close_time;//½áÊøÊ±¼ä
+extern int open_time;//é€‰è¯¾å¼€æ”¾æ—¶é—´
+extern int close_time;//ç»“æŸæ—¶é—´
 
 class Student {
 private:
@@ -15,11 +15,11 @@ private:
 public:
 	Student(string i, string p) :id(i), password(p){};
 	~Student() {};
-	int Load();//µÇÂ½
-	//void SelectCourse();//Ñ¡¿Î  ps:Ê±¼ä,Ñ¡¿ÎÊıÁ¿£¬²»ÄÜÑ¡Ñ¡ĞŞ¿Î ÓĞÏŞÖÆ¸ù¾İ¹ÜÀíÔ±¹æ¶¨ 
-	//void DeleteCourse();//É¾¿Î
-	//void CourseSelected();//ÒÑÑ¡¿Î³Ì
-	void GetGrades();//²é¿´³É¼¨ºÍËùĞŞÑ§·Ö
+	int Load();//ç™»é™†
+	//void SelectCourse();//é€‰è¯¾  ps:æ—¶é—´,é€‰è¯¾æ•°é‡ï¼Œä¸èƒ½é€‰é€‰ä¿®è¯¾ æœ‰é™åˆ¶æ ¹æ®ç®¡ç†å‘˜è§„å®š 
+	//void DeleteCourse();//åˆ è¯¾
+	//void CourseSelected();//å·²é€‰è¯¾ç¨‹
+	void GetGrades();//æŸ¥çœ‹æˆç»©å’Œæ‰€ä¿®å­¦åˆ†
 
 
 
