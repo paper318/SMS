@@ -1,8 +1,36 @@
 #include"teacher.hpp"
+#include"MyownSQL.hpp"
 
-void Load(string id, string password);//µÇÂ¼
-void StudentCount();//Ñ§ÉúÈËÊı
-void CourseStat();//¿ª¿ÎÍ³¼Æ£¬(¿ªÁËÄÄĞ©¿Î£¬Ã¿¸öÑ¡¿ÎÈËÊı)
-				  //ÈÎ¿Î½ÌÊ¦¿ÉÒÔ²éÑ¯×Ô¼º¿ªÉèµÄ¿Î³Ì£¬²¢½øĞĞºË×¼È·ÈÏ¡£Ôİ²»ÊµÏÖ£¬²»ºÃ²âÊÔ  
-void QueryTeacher();//ÊäÈë¿Î³Ì»òµÃµ½ÀÏÊ¦ºÍÀÏÊ¦Ïà¹ØĞÅÏ¢
-void QueryStudent();//»ñµÃÖ¸¶¨Ñ§ÉúµÄÏà¹ØĞÅÏ¢
+
+int Teacher::Load()//ç™»å½•
+{ //è¿”å›2ï¼šç™»å½•æˆåŠŸï¼Œ-1ï¼šå¤±è´¥ï¼Œ0ï¼šç¨‹åºå…¶ä»–é”™è¯¯
+	string str = "select PasswdTea( ";
+	str += quote + id + quote + comma + quote + password + quote + rb + semi;
+	int token = Query(str.c_str(),int(2));
+	//int(2ï¼‰å”¯ä¸€çš„æ„ä¹‰æä¾›ä¸€ä¸ªintå‚æ•°å°±æ˜¯å¯¹queryé‡è½½è¯†åˆ«
+	return token;
+}
+
+void Teacher::TeaQueryStu()//è€å¸ˆæŸ¥è¯¢å­¦ç”Ÿæƒ…å†µï¼ˆå¦‚é€‰äº†è¯¥è€å¸ˆè¯¾ç¨‹çš„å­¦ç”Ÿçš„ç­çº§ï¼Œå­¦å·ï¼Œå§“åï¼‰
+{
+	string str = "call TeaQueryStu(";
+	str += quote + id + quote + semi;
+	Query(str.c_str());
+}
+
+
+void Teacher::TeaCourseStat()//å¼€è¯¾ç»Ÿè®¡ï¼Œ(å¼€äº†å“ªäº›è¯¾ï¼Œæ¯ä¸ªé€‰è¯¾äººæ•°)
+{
+	string str = "call TeaCourseStat(";
+	str += quote + id + quote + semi;
+	Query(str.c_str());
+}
+
+void Teacher::worktime()//æŸ¥è¯¢è‡ªå·±çš„æ•™å­¦ç­çº§ï¼Œæ•™å­¦æ—¶é—´
+{
+	string str = "call worktime(";
+	str += quote + id + quote + semi;
+	Query(str.c_str());
+}
+
+  

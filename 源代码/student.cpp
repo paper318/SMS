@@ -1,23 +1,23 @@
 #include"student.hpp"
 //zhanxinrui
-extern int open_time;//Ñ¡¿Î¿ª·ÅÊ±¼ä
-extern int close_time;//½áÊøÊ±¼äv
+extern int open_time;//é€‰è¯¾å¼€æ”¾æ—¶é—´
+extern int close_time;//ç»“æŸæ—¶é—´v
 
-int  Student::Load() {//µÇÂ½
-	string str = "select PasswodStu( ";
+int  Student::Load() {//ç™»é™†
+	string str = "select PasswdStu( ";
 	str += quote+id+quote+comma+quote+password+quote+rb+semi;
 	
-	int token = Query(str.c_str());
+	int token = Query(str.c_str(),int(2)); 
+	//int(2ï¼‰å”¯ä¸€çš„æ„ä¹‰æä¾›ä¸€ä¸ªintå‚æ•°å°±æ˜¯å¯¹queryé‡è½½è¯†åˆ«
 	return token;
 
-
-
-	
 }
 	
-void Student::GetGrades() {//²é¿´³É¼¨ºÍËùĞŞÑ§·Ö
+void Student::GetGrades() {//æŸ¥çœ‹æˆç»©å’Œæ‰€ä¿®å­¦åˆ†
 	string str = "select GetGrades(";
 	str += quote + id + quote + rb + semi;
 	Query(str.c_str());
 
+
 }
+

@@ -1,46 +1,49 @@
-#include"mysql.hpp"
+#include"MyownSQL.hpp"
 #include<vector>
 #include<iostream>
 MYSQL myobj;
 string comma = ",", plus = "+", quote = "\"", space = " ", lb = "(", rb = ")", semi = ";",colon= ":",hyphen="-";
 
 
-//³õÊ¼»¯Êı¾İ¿â
+//åˆå§‹åŒ–æ•°æ®åº“
 void InitDB() {
 	string sqlstr;
-	//³õÊ¼»¯lib
+	//åˆå§‹åŒ–lib
 	mysql_library_init(0, NULL, NULL);
-	//³õÊ¼»¯mysql
+	//åˆå§‹åŒ–mysql
 	mysql_init(&myobj);
-	//mysql_query(&myobj,"SET NAMES GBK");±¨´í
+	//mysql_query(&myobj,"SET NAMES GBK");æŠ¥é”™
 
-	//ÉèÖÃoption
+	//è®¾ç½®option
 	mysql_options(&myobj, MYSQL_SET_CHARSET_NAME, "gbk");
-	//Á¬½ÓÊı¾İ¿â
+	//è¿æ¥æ•°æ®åº“
 	//if(NULL!= mysql_databse)
 	if (NULL != mysql_real_connect(&myobj, "localhost", "root", "zhanxinrui", "test", 3306, NULL, CLIENT_MULTI_STATEMENTS))
-		//ÕâÀïµÄµØÖ·£¬ÓÃ»§Ãû£¬ÃÜÂë£¬¶Ë¿Ú¿ÉÒÔ¸ù¾İ×Ô¼º±¾µØµÄÇé¿ö¸ü¸Ä  
+		//è¿™é‡Œçš„åœ°å€ï¼Œç”¨æˆ·åï¼Œå¯†ç ï¼Œç«¯å£å¯ä»¥æ ¹æ®è‡ªå·±æœ¬åœ°çš„æƒ…å†µæ›´æ”¹  
 	{
+		
 		cout << "mysql_real_connect() succeed" << endl;
 	}
 	else {
 		cout << "mysql_real_connect() failed" << endl;
+		cout << mysql_error(&myobj) << endl; //æŠ¥å‘Šé”™è¯¯åŸå› 
 		exit(1);
 	}
 	//mysql_query(&myobj, "set names utf8");
-	//Ê¹ÓÃ»ò´´½¨Êı¾İ¿â
+	//ä½¿ç”¨æˆ–åˆ›å»ºæ•°æ®åº“
 	UseDB("studb");
 
 	//mysql_free_result(result);
 
 }
 
-//¹Ø±Õ
+//å…³é—­
 void closeDB() {
 	mysql_close(&myobj);
 	mysql_server_end();
+	cout << "Datebase closed success..." << endl;
 }
-//Ê¹ÓÃÊı¾İ¿â
+//ä½¿ç”¨æ•°æ®åº“
 void UseDB(const char * sqlstr) {
 
 	if (mysql_select_db(&myobj, sqlstr) == 0)
@@ -48,29 +51,30 @@ void UseDB(const char * sqlstr) {
 		cout << "use database" << sqlstr << endl;
 	}
 	else {
-		cout << "²»´æÔÚÏà¹ØÊı¾İ¿â" << endl;
+		cout << "ä¸å­˜åœ¨ç›¸å…³æ•°æ®åº“" << endl;
 	}
 
 }
-//²»´ø³É¹¦ĞÅÏ¢µÄQuery
+//æ‰§è¡Œmysqlè¯­å¥ï¼Œå°†ç»“æœé›†ä¸­çš„æ‰€æœ‰è¡¨æ‰“å°è¾“å‡ºåˆ°å±å¹•
 int Query(const char * sqlstr) {
 	int status = mysql_query(&myobj, sqlstr);
-	if (status>0)//·Ç0Ê§°Ü
+	if (status)//é0å¤±è´¥
 	{
-		cout << "Query failed" << endl;
+		cout << "Query failed:" << endl;
+		cout << mysql_error(&myobj) << endl;
 		mysql_close(&myobj);
 		return 1;
 	}
 	cout << "Query success" << endl;
 	GetStoreData(status);
 
-	return 0;//³É¹¦
+	return 0;//æˆåŠŸ
 
 }
-//µ¼³öµÄ²éÑ¯
+//æ‰§è¡Œmysqlçš„è¯­å¥æŸ¥è¯¢ï¼Œå°†ç»“æœé›†ä¸­æ‰€æœ‰çš„è¡¨æ‰“å°è¾“å‡ºåˆ°æ–‡ä»¶
 int Query(const char* sqlstr,fstream* fp) {
 	int status = mysql_query(&myobj, sqlstr);
-	if (status>0)//·Ç0Ê§°Ü
+	if (status)//é0å¤±è´¥
 	{
 		cout << "Query failed" << endl;
 		mysql_close(&myobj);
@@ -79,10 +83,10 @@ int Query(const char* sqlstr,fstream* fp) {
 	cout << "Query success" << endl;
 	GetStoreData(status,fp);
 
-	return 0;//³É¹¦
+	return 0;//æˆåŠŸ
 }
 
-//¸øQuery´«µİĞÅÏ¢ÁË
+//ç»™Queryä¼ é€’ä¿¡æ¯äº†
 int Query(const char * sqlstr, char* success, char* failed) {
 	int status = mysql_query(&myobj, sqlstr);
 	if (status>0)
@@ -96,27 +100,30 @@ int Query(const char * sqlstr, char* success, char* failed) {
 	return 0;
 }
 
-//ĞèÒªQuery·µ»ØÅĞ¶ÏÊÇ·ñµÇÂ½³É¹¦£¬
-int Query(const char * sqlstr,int token) {
+
+//è¿™ä¸ªå‡½æ•°åªç”¨äºè°ƒç”¨å››ä¸ªmysqlå‡½æ•°,åˆ¤æ–­å››ç§ç”¨æˆ·è´¦å·å¯†ç æ˜¯å¦æ­£ç¡®
+int Query(const char * sqlstr,int token) {  // è¿™ä¸ªtokenå‚æ•°å”¯ä¸€ä½œç”¨å°±æ˜¯é‡è½½
 	int tag = 0;
 	int status = mysql_query(&myobj, sqlstr);
 
-	if (status>0)//·Ç0Ê§°Ü
+	if (status)//é0å¤±è´¥
 	{
 		cout << "Query failed" << endl;
 		mysql_close(&myobj);
 		return 1;
 	}
 	cout << "Query success" << endl;
-	tag = GetStoreData(status,token);
+	tag = GetStoreData(status,token); //è¿™ä¸¤ä¸ªå‚æ•°è¿™ä¸ªå‡½æ•°å†…éƒ¨æ¯«æ— ä½œç”¨ï¼Œå”¯ä¸€ä½œç”¨å°±æ˜¯èµ·åˆ°é‡è½½è¯†åˆ«ä½œç”¨äº†
 
-	return tag;//0±íÊ¾query³É¹¦ 2±íÊ¾²éÑ¯func½á¹ûreturn success -1 ±íÊ¾func·µ»ØÎŞĞ§
+	return tag;//è¿”å›2ï¼šç™»å½•æˆåŠŸï¼Œè¿”å›-1ï¼šè´¦å·å¯†ç é”™è¯¯ï¼Œè¿”å›0ï¼šç¨‹åºè¿è¡Œé”™è¯¯
 
 }
-//½«²éÑ¯½á¹û´ò°ü³ÉÏòÁ¿¡£·µ»Ø
-int Query(const char * sqlstr, vector<string> &data) {
+
+
+//æ‰§è¡Œmysqlè¯­å¥ï¼Œå°†ç»“æœé›†ä¸­çš„æ‰€æœ‰è¡¨å­˜å‚¨åˆ°vector<vector<string>> data ä¸­è¿”å›
+int Query(const char * sqlstr, vector<vector<string>> &data) {
 	int status = mysql_query(&myobj, sqlstr);
-	if (status>0)//·Ç0Ê§°Ü
+	if (status)//é0å¤±è´¥
 	{
 		cout << "Query failed" << endl;
 		mysql_close(&myobj);
@@ -125,13 +132,13 @@ int Query(const char * sqlstr, vector<string> &data) {
 	cout << "Query success" << endl;
 	GetStoreData(status,data);
 
-	return 0;//³É¹¦
+	return 0;//æˆåŠŸ
 }
 
 
 
 
-//Õı³£¶Ô·µ»ØĞÅÏ¢´¦Àí
+//æ­£å¸¸å¯¹è¿”å›ä¿¡æ¯å¤„ç†
 void GetStoreData(int status) {
 	MYSQL_RES *result = NULL;
 	do {
@@ -145,28 +152,37 @@ void GetStoreData(int status) {
 				cout << mysql_affected_rows(&myobj) << " rows affected\n";
 			}
 			else {
-				cout << "error \n";
+				cout << "error:" << mysql_error(&myobj) << endl;
 				break;
 			}
 		}
 		if ((status = mysql_next_result(&myobj)) > 0)
-			/*		·µ»ØÖµ	ÃèÊö
-			0	³É¹¦£¬²¢ÓĞ¸ü¶àµÄ½á¹û
-			- 1	³É¹¦£¬Ã»ÓĞ¸ü¶àµÄ½á¹û
-			> 0	·¢Éú´íÎó*/
+			/*		è¿”å›å€¼	æè¿°
+			0	æˆåŠŸï¼Œå¹¶æœ‰æ›´å¤šçš„ç»“æœ
+			- 1	æˆåŠŸï¼Œæ²¡æœ‰æ›´å¤šçš„ç»“æœ
+			> 0	å‘ç”Ÿé”™è¯¯*/
 			cout << "could not execute statement\n";
 
 	} while (status == 0);
 }
 
-//·µ»Ø²éÑ¯ true or falseµÄ
+//è¿”å›2ï¼šç™»å½•æˆåŠŸï¼Œè¿”å›-1ï¼šè´¦å·å¯†ç é”™è¯¯ï¼Œè¿”å›0ï¼šç¨‹åºè¿è¡Œé”™è¯¯
 int GetStoreData(int status,int token) {
-	int tag = 0;//µ±Ç°²ãµÄ±êÖ¾
+	int tag = 0;
+	string a = "Success"; 
+	string b;  //è´Ÿè´£è¿”å›æ•°æ®åº“æŸ¥è¯¢ç»“æœï¼Œå› ä¸ºæ•°æ®åº“è¿”å›æ˜¯ä¸€ä¸ªchar*æ•°ç»„ï¼Œæ‰€ä»¥éœ€è¦è½¬æˆstring
 	MYSQL_RES *result = NULL;
 	do {
 		result = mysql_store_result(&myobj);
 		if (result) {
-			tag = process_result_set(result,token);
+				
+				MYSQL_ROW row = mysql_fetch_row(result); 
+			    //æ³¨æ„MYSQL_ROWæ˜¯ä¸€ä¸ªä»¥ç©ºå­—ç¬¦ç»“å°¾çš„å­—ç¬¦ä¸²æ•°ç»„
+				b = row[0];
+				if (b== a) tag=2;//ç”¨2è¡¨ç¤ºsuccess
+				else tag = -1;//-1è¡¨ç¤ºfail
+				
+	
 			mysql_free_result(result);
 		}
 		else {
@@ -179,19 +195,18 @@ int GetStoreData(int status,int token) {
 			}
 		}
 		if ((status = mysql_next_result(&myobj)) > 0)
-			/*		·µ»ØÖµ	ÃèÊö
-			0	³É¹¦£¬²¢ÓĞ¸ü¶àµÄ½á¹û
-			- 1	³É¹¦£¬Ã»ÓĞ¸ü¶àµÄ½á¹û
-			> 0	·¢Éú´íÎó*/
+			/*		è¿”å›å€¼	æè¿°
+			0	æˆåŠŸï¼Œå¹¶æœ‰æ›´å¤šçš„ç»“æœ
+			- 1	æˆåŠŸï¼Œæ²¡æœ‰æ›´å¤šçš„ç»“æœ
+			> 0	å‘ç”Ÿé”™è¯¯*/
 			cout << "could not execute statement\n";
 
 	} while (status == 0);
 	return tag;
-
 }
 
-//ĞèÒª·µ»ØÊı¾İ¿â²éÑ¯ºóµÄÏòÁ¿Êı¾İ
-void GetStoreData(int status, vector <string>&data) {
+//éœ€è¦è¿”å›æ•°æ®åº“æŸ¥è¯¢åçš„å‘é‡æ•°æ®
+void GetStoreData(int status, vector<vector <string>> &data) {
 	MYSQL_RES *result = NULL;
 	do {
 		result = mysql_store_result(&myobj);
@@ -209,17 +224,17 @@ void GetStoreData(int status, vector <string>&data) {
 			}
 		}
 		if ((status = mysql_next_result(&myobj)) > 0)
-			/*		·µ»ØÖµ	ÃèÊö
-			0	³É¹¦£¬²¢ÓĞ¸ü¶àµÄ½á¹û
-			- 1	³É¹¦£¬Ã»ÓĞ¸ü¶àµÄ½á¹û
-			> 0	·¢Éú´íÎó*/
+			/*		è¿”å›å€¼	æè¿°
+			0	æˆåŠŸï¼Œå¹¶æœ‰æ›´å¤šçš„ç»“æœ
+			- 1	æˆåŠŸï¼Œæ²¡æœ‰æ›´å¤šçš„ç»“æœ
+			> 0	å‘ç”Ÿé”™è¯¯*/
 			cout << "could not execute statement\n";
 
 	} while (status == 0);
 
 }
 
-//½øĞĞµ¼³öÎÄ¼şµÄ
+//è¿›è¡Œå¯¼å‡ºæ–‡ä»¶çš„
 void GetStoreData(int status, fstream* fp) {
 	MYSQL_RES *result = NULL;
 	do {
@@ -238,10 +253,10 @@ void GetStoreData(int status, fstream* fp) {
 			}
 		}
 		if ((status = mysql_next_result(&myobj)) > 0)
-			/*		·µ»ØÖµ	ÃèÊö
-			0	³É¹¦£¬²¢ÓĞ¸ü¶àµÄ½á¹û
-			- 1	³É¹¦£¬Ã»ÓĞ¸ü¶àµÄ½á¹û
-			> 0	·¢Éú´íÎó*/
+			/*		è¿”å›å€¼	æè¿°
+			0	æˆåŠŸï¼Œå¹¶æœ‰æ›´å¤šçš„ç»“æœ
+			- 1	æˆåŠŸï¼Œæ²¡æœ‰æ›´å¤šçš„ç»“æœ
+			> 0	å‘ç”Ÿé”™è¯¯*/
 			cout << "could not execute statement\n";
 
 	} while (status == 0);
@@ -250,25 +265,14 @@ void GetStoreData(int status, fstream* fp) {
 
 
 
-//·µ»ØµÄÊÇ¶Ôº¯Êı²éÑ¯³É¹¦Óë·ñ½øĞĞÅĞ¶Ï£¬²»´òÓ¡ÎÄ×Ö
-int process_result_set(MYSQL_RES* result,int token) {
-	string a = "success";
-	if (token = 1) {
-		MYSQL_ROW row = mysql_fetch_row(result);
-		if (row[0] == a) {
-			return 2;//ÓÃ2±íÊ¾success
-		}
-		else
-			return -1;//-1±íÊ¾fail
-	}
-}
 
 
-//Ò»°ãµÄ¶Ô²éÑ¯½á¹ûµÄ´òÓ¡
+
+//ä¸€èˆ¬çš„å¯¹æŸ¥è¯¢ç»“æœçš„æ‰“å°
 void process_result_set(MYSQL_RES * result) {
 	int rowcount = mysql_num_rows(result);
 	cout << "row count:" << rowcount << endl;
-	//´òÓ¡×Ö¶ÎÃû³Æ
+	//æ‰“å°å­—æ®µåç§°
 	MYSQL_FIELD *field = NULL;
 	int fieldcount = mysql_num_fields(result);
 	for (int i = 0; i < fieldcount; i++) {
@@ -280,14 +284,14 @@ void process_result_set(MYSQL_RES * result) {
 		cout << setiosflags(ios::left) << setw(14) << field->name;
 	}
 	cout << endl;
-	//´òÓ¡¸÷ĞĞ
+	//æ‰“å°å„è¡Œ
 	for (int i = 0; i < fieldcount; i++) {
 		cout << "_______________";
 
 	}
 	cout << endl;
 	MYSQL_ROW row = NULL;
-	row = mysql_fetch_row(result);//Ò»ĞĞÒ»ĞĞ»ñÈ¡Ö±µ½Ã»ÓĞ
+	row = mysql_fetch_row(result);//ä¸€è¡Œä¸€è¡Œè·å–ç›´åˆ°æ²¡æœ‰
 	while (NULL != row) {
 		for (int i = 0; i < fieldcount; i++) {
 			cout << setiosflags(ios::left) << setw(14) << row[i];
@@ -297,11 +301,13 @@ void process_result_set(MYSQL_RES * result) {
 	}
 }
 
-//·µ»ØÏòÁ¿µÄÊı¾İ´¦Àí
-void process_result_set(MYSQL_RES * result,vector<string>&data) {
+//è¿”å›å‘é‡çš„æ•°æ®å¤„ç†
+void process_result_set(MYSQL_RES * result,vector<vector<string>> &data) {
 	int rowcount = mysql_num_rows(result);
+	vector<string> tem; // æ¯ä¸€ä¸ªprocess  process_result_set å¤„ç†çš„æ˜¯ç»“æœé›†ä¸­çš„ä¸€ä¸ªè¡¨
+						//æ‰€ä»¥temæ˜¯ç”¨æ¥è·å–å½“å‰è¿™ä¸ªè¡¨çš„æ•°æ®ï¼Œç„¶åå†å­˜å‚¨åˆ°dataè¿™ä¸ªç»“æœé›†ä¸­
 //	cout << "row count:" << rowcount << endl;
-	//´òÓ¡×Ö¶ÎÃû³Æ
+	//æ‰“å°å­—æ®µåç§°
 	MYSQL_FIELD *field = NULL;
 	int fieldcount = mysql_num_fields(result);
 
@@ -310,22 +316,22 @@ void process_result_set(MYSQL_RES * result,vector<string>&data) {
 	//	//cout << setiosflags(ios::left) << setw(14) << field->name;
 	//}
 	MYSQL_ROW row = NULL;
-	row = mysql_fetch_row(result);//Ò»ĞĞÒ»ĞĞ»ñÈ¡Ö±µ½Ã»ÓĞ
+	row = mysql_fetch_row(result);//ä¸€è¡Œä¸€è¡Œè·å–ç›´åˆ°æ²¡æœ‰
 	while (NULL != row) {
 		for (int i = 0; i < fieldcount; i++) {
-			data.push_back(row[i]);
+			tem.push_back(row[i]);
 		}
 		cout << endl;
 		row = mysql_fetch_row(result);
 	}
-
+	data.push_back(tem); 
 }
 
-//Êä³öµ½ÎÄ¼şÖĞ
+//è¾“å‡ºåˆ°æ–‡ä»¶ä¸­
 void process_result_set(MYSQL_RES * result, fstream*fp) {
 	int rowcount = mysql_num_rows(result);
 	//	fp << "row count:" << rowcount << endl;
-	//´òÓ¡×Ö¶ÎÃû³Æ
+	//æ‰“å°å­—æ®µåç§°
 	MYSQL_FIELD *field = NULL;
 	int fieldcount = mysql_num_fields(result);
 	for (int i = 0; i < fieldcount; i++) {
@@ -337,14 +343,14 @@ void process_result_set(MYSQL_RES * result, fstream*fp) {
 		*fp << setiosflags(ios::left) << setw(14) << field->name;
 	}
 	*fp << endl;
-	//´òÓ¡¸÷ĞĞ
+	//æ‰“å°å„è¡Œ
 	for (int i = 0; i < fieldcount; i++) {
 		*fp << "_______________";
 
 	}
 	*fp << endl;
 	MYSQL_ROW row = NULL;
-	row = mysql_fetch_row(result);//Ò»ĞĞÒ»ĞĞ»ñÈ¡Ö±µ½Ã»ÓĞ
+	row = mysql_fetch_row(result);//ä¸€è¡Œä¸€è¡Œè·å–ç›´åˆ°æ²¡æœ‰
 	while (NULL != row) {
 		for (int i = 0; i < fieldcount; i++) {
 			*fp << setiosflags(ios::left) << setw(14) << row[i];
