@@ -1,5 +1,27 @@
 #include"manager.hpp"
-void Load(string id, string password);
+#include"MyownSQL.hpp"
+int Manager::Load(string id, string password)
+{
+	string str = "select PasswdMan( ";
+	str += quote + id + quote + comma + quote + password + quote + rb + semi;
 
-/*¸ü¸ÄÕË»§*/
-void ChangePassword();//¶ÔÈÎºÎÓÃ»§¿ÉÒÔ¸ü¸ÄÃÜÂë
+	int token = Query(str.c_str(), int(2));
+	//int(2ï¼‰å”¯ä¸€çš„æ„ä¹‰æä¾›ä¸€ä¸ªintå‚æ•°å°±æ˜¯å¯¹queryé‡è½½è¯†åˆ«
+	return token;
+
+}
+
+
+
+/*æ›´æ”¹è´¦æˆ·*/
+void ChangePassword() //å¯¹ä»»ä½•ç”¨æˆ·å¯ä»¥æ›´æ”¹å¯†ç 
+{
+	std::string str, sqlstr;
+	while (getline(cin, str))
+	{
+		sqlstr += str;
+		str.clear();
+	}
+	Query(sqlstr.c_str());
+
+}

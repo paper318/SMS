@@ -1,4 +1,30 @@
 #include"Exam.hpp"
-void RoomArrange();//¿¼ÊÔ½ÌÊÒ°²ÅÅ,·µ»Ø¿¼ÊÔ°²ÅÅ±í
-void TestInfo();//Ñ§Éú£¬ÈÎ¿ÎÀÏÊ¦£¬¼à¿¼ÀÏÊ¦µÈ¿¼ÊÔĞÅÏ¢
-void PrintInfo();//´òÓ¡¿¼ÊÔ°²ÅÅ±í£¬¿¼ÊÔĞÅÏ¢txt¡£
+#include"MyownSQL.hpp"
+#include<iostream>
+#include<string>
+#include<fstream>
+using namespace std;
+void testArrange() //è€ƒè¯•æ•™å®¤å®‰æ’,ç®¡ç†å‘˜å½•å…¥ç”Ÿæˆ
+{
+	std::string str, sqlstr;
+	while (getline(cin, str))
+	{
+		sqlstr += str;
+		str.clear();
+	}
+	Query(sqlstr.c_str());
+}
+
+void PrintInfo() //æ‰“å°è€ƒè¯•å®‰æ’è¡¨ï¼Œè€ƒè¯•ä¿¡æ¯txtã€‚
+{
+	string str = "call PrintInfo();";
+	string filename;
+	cout << "please import the address of file which you want to save as: " << endl;
+	cin >> filename;
+	fstream file(filename);
+	if (!file.is_open()) {
+		cout << "Error opening file" << endl;
+		return;
+	}
+	Query(str.c_str(), &file);
+}

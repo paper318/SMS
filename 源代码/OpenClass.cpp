@@ -1,56 +1,56 @@
 #include"OpenClass.hpp"
-#include"mysql.hpp"
+#include"MyownSQL.hpp"
 #include<vector>
 #include<fstream>
 #include<sstream>
 using namespace std;
 int stu_count;
-/*½ÌÊ¦*/
+/*æ•™å¸ˆ*/
 
-//start stop¸ñÊ½Ó¦¸ÃÎª y-m-d h:m:s
-void OpenCourse(string course_id, string course_name,string start,string stop ,string tea_id,string num,string credit) {//Ìí¼Ó¿Î³ÌÓÃÓÚÑ¡¿Î£¬²¢ÉèÖÃÑ¡¿ÎÊ±¼ä£¬Ñ¡¿ÎÊı£¬Õë¶Ô´óÒ»²»ÄÜÑ¡Ñ¡ĞŞ¿Î
+//start stopæ ¼å¼åº”è¯¥ä¸º y-m-d h:m:s
+void OpenCourse(string course_id, string course_name,string start,string stop ,string tea_id,string num,string credit) {//æ·»åŠ è¯¾ç¨‹ç”¨äºé€‰è¯¾ï¼Œå¹¶è®¾ç½®é€‰è¯¾æ—¶é—´ï¼Œé€‰è¯¾æ•°ï¼Œé’ˆå¯¹å¤§ä¸€ä¸èƒ½é€‰é€‰ä¿®è¯¾
 	string str = "call OpenCourse(";
 	str += quote+course_id+quote+comma+quote+course_name+quote+comma+quote + start + quote + comma + quote + stop + quote + comma + quote+tea_id+quote+comma+num + comma + credit + rb+semi;
-	Query(str.c_str(), "¿ª¿Î³É¹¦", "¿ª¿ÎÊ§°Ü");
+	Query(str.c_str(), "å¼€è¯¾æˆåŠŸ", "å¼€è¯¾å¤±è´¥");
 }
 
-void CreateProject(string course_id ,string tea_id,string text) {//½ÌÑ§¼Æ»®ĞÅÏ¢²éÑ¯´¦ÀíºÍ·¢²¼£¿£¿£¿
+void CreateProject(string course_id ,string tea_id,string text) {//æ•™å­¦è®¡åˆ’ä¿¡æ¯æŸ¥è¯¢å¤„ç†å’Œå‘å¸ƒï¼Ÿï¼Ÿï¼Ÿ
 	string str = "call CreateProject(";
 	str += quote + course_id + quote + comma + quote + tea_id + quote + comma + quote + text + quote  + rb + semi;
-	Query(str.c_str(),"´´½¨¼Æ»®³É¹¦","´´½¨¼Æ»®Ê§°Ü");
+	Query(str.c_str(),"åˆ›å»ºè®¡åˆ’æˆåŠŸ","åˆ›å»ºè®¡åˆ’å¤±è´¥");
 }
-void SelectProject(string course_id, string tea_id) {//²é¿´½ÌÑ§ĞÅÏ¢
+void SelectProject(string course_id, string tea_id) {//æŸ¥çœ‹æ•™å­¦ä¿¡æ¯
 	string str = "call SelectProject(";
 	str += quote + course_id + quote + comma + quote + tea_id + quote  + rb + semi;
-	Query(str.c_str(), "²éÑ¯¼Æ»®³É¹¦", "²éÑ¯¼Æ»®Ê§°Ü");
+	Query(str.c_str(), "æŸ¥è¯¢è®¡åˆ’æˆåŠŸ", "æŸ¥è¯¢è®¡åˆ’å¤±è´¥");
 }
-void QueryStudent(string tea_id) {//²éÑ¯Ëù´øÑ§Éú£¬¿ÉÒÔ²éÑ¯¸÷Ñ§ÉúÕâÃÅ¿Î³É¼¨
+void QueryStudent(string tea_id) {//æŸ¥è¯¢æ‰€å¸¦å­¦ç”Ÿï¼Œå¯ä»¥æŸ¥è¯¢å„å­¦ç”Ÿè¿™é—¨è¯¾æˆç»©
 	string str = "call QueryStudent(";
 	str += quote + tea_id + quote + rb+semi;
-	Query(str.c_str(), "²éÑ¯Ñ§Éú³É¹¦", "²éÑ¯Ñ§ÉúÊ§°Ü");
+	Query(str.c_str(), "æŸ¥è¯¢å­¦ç”ŸæˆåŠŸ", "æŸ¥è¯¢å­¦ç”Ÿå¤±è´¥");
 
 }
-void QueryCourse(string tea_id) { //²éÑ¯×Ô¼º¿ªµÄ¿Î³Ì£¬¸÷¿Î³ÌÑ¡¿ÎÇé¿ö
+void QueryCourse(string tea_id) { //æŸ¥è¯¢è‡ªå·±å¼€çš„è¯¾ç¨‹ï¼Œå„è¯¾ç¨‹é€‰è¯¾æƒ…å†µ
 	string str = "call QueryCourse(";
 	str += quote + tea_id + quote + rb + semi;
-	Query(str.c_str(), "²éÑ¯¿Î³Ì³É¹¦", "²éÑ¯¿Î³ÌÊ§°Ü");
+	Query(str.c_str(), "æŸ¥è¯¢è¯¾ç¨‹æˆåŠŸ", "æŸ¥è¯¢è¯¾ç¨‹å¤±è´¥");
 }
-					/*¹ÜÀíÔ±*/
-void QueryBooks(string book_id) {//½Ì²Ä¿âĞÅÏ¢(Ãû³Æ£ºÊıÁ¿)
+					/*ç®¡ç†å‘˜*/
+void QueryBooks(string book_id) {//æ•™æåº“ä¿¡æ¯(åç§°ï¼šæ•°é‡)
 	string str = "call QueryBooks(";
 	str += quote + book_id + quote + rb + semi;
-	Query(str.c_str(), "²éÑ¯½Ì²Ä³É¹¦", "²éÑ¯½Ì²ÄÊ§°Ü");
+	Query(str.c_str(), "æŸ¥è¯¢æ•™ææˆåŠŸ", "æŸ¥è¯¢æ•™æå¤±è´¥");
 }
-void UpdateBooks(string book_id ,string name,string num) {//¸üĞÂ½Ì²ÄĞÅÏ¢
+void UpdateBooks(string book_id ,string name,string num) {//æ›´æ–°æ•™æä¿¡æ¯
 	string str = "call UpdateBooks(";
 	str += quote + book_id + quote + comma+quote+name+quote+comma +num  + rb + semi;
-	Query(str.c_str(), "¸üĞÂ½Ì²Ä³É¹¦", "¸üĞÂ½Ì²ÄÊ§°Ü");
+	Query(str.c_str(), "æ›´æ–°æ•™ææˆåŠŸ", "æ›´æ–°æ•™æå¤±è´¥");
 }
-void CourseInfoQuery() {//¿ª¿ÎÄ¿Â¼ĞÅÏ¢²éÑ¯
+void CourseInfoQuery() {//å¼€è¯¾ç›®å½•ä¿¡æ¯æŸ¥è¯¢
 	string str = "call CourseInfoQuery()";
-	Query(str.c_str(), "²éÑ¯¿ª¿ÎÄ¿Â¼³É¹¦", "²éÑ¯¿ª¿ÎÄ¿Â¼Ê§°Ü");
+	Query(str.c_str(), "æŸ¥è¯¢å¼€è¯¾ç›®å½•æˆåŠŸ", "æŸ¥è¯¢å¼€è¯¾ç›®å½•å¤±è´¥");
 }
-void SetClass(int num) {//·ÖÅä°à¼¶£¬·ÖÅäÑ§ºÅ Ó¦¸ÃÊÇ×î¿ªÊ¼Íê³É£¬Í¨¹ı´ÓÎÄ¼şÖĞ¶ÁÈ¡ËùÓĞµÄĞÅÏ¢£¬È»ºó°´ÕÕĞèÇóÃ¿°à¶àÉÙÈË£¬½øĞĞ·ÖÅä
+void SetClass(int num) {//åˆ†é…ç­çº§ï¼Œåˆ†é…å­¦å· åº”è¯¥æ˜¯æœ€å¼€å§‹å®Œæˆï¼Œé€šè¿‡ä»æ–‡ä»¶ä¸­è¯»å–æ‰€æœ‰çš„ä¿¡æ¯ï¼Œç„¶åæŒ‰ç…§éœ€æ±‚æ¯ç­å¤šå°‘äººï¼Œè¿›è¡Œåˆ†é…
 	fstream fs("student.txt");
 	string name, department, passwd = "123456";
 	int grade,id, cls =1,count=0;
@@ -71,11 +71,11 @@ void SetClass(int num) {//·ÖÅä°à¼¶£¬·ÖÅäÑ§ºÅ Ó¦¸ÃÊÇ×î¿ªÊ¼Íê³É£¬Í¨¹ı´ÓÎÄ¼şÖĞ¶ÁÈ¡Ë
 		
 }
 
-void CreateStu(int id ,string name,int cls, int grade,string department,string passwd) {//ĞÂ½¨Ò»¸öÑ§Éú
-	string res_id,res_cls,res_grade;//ÕûÊıÀàĞÍÎªÁË×Ö·û´®Æ´½Ó£¬µÃ×ª»»³É×Ö·û´®
+void CreateStu(int id ,string name,int cls, int grade,string department,string passwd) {//æ–°å»ºä¸€ä¸ªå­¦ç”Ÿ
+	string res_id,res_cls,res_grade;//æ•´æ•°ç±»å‹ä¸ºäº†å­—ç¬¦ä¸²æ‹¼æ¥ï¼Œå¾—è½¬æ¢æˆå­—ç¬¦ä¸²
 	stringstream ss;
 	ss <<  id;
-	ss >> res_id;//»òÕß res = ss.str();  
+	ss >> res_id;//æˆ–è€… res = ss.str();  
 	ss << cls;
 	ss >> res_cls;
 	ss << grade;
@@ -86,48 +86,48 @@ void CreateStu(int id ,string name,int cls, int grade,string department,string p
 	
 }
 
-void ModifyClass(string stu_id, string cls) {//·Ö°àµ÷Õû£¬£¨Ñ§Éú¸ü¸Ä°à£©
+void ModifyClass(string stu_id, string cls) {//åˆ†ç­è°ƒæ•´ï¼Œï¼ˆå­¦ç”Ÿæ›´æ”¹ç­ï¼‰
 	string str = "call ModifyClass(";
 	str += quote + stu_id + quote + comma + cls+  rb + semi;
 	Query(str.c_str());
 }
-void GetClass() {//·Ö°àµÄÇé¿ö £¨¸÷°àÈË £¬ĞÕÃû£©
+void GetClass() {//åˆ†ç­çš„æƒ…å†µ ï¼ˆå„ç­äºº ï¼Œå§“åï¼‰
 	string str = "call GetClass()";
 	Query(str.c_str());
 }
 
 
 
-void ScheduleSetByStu(string sid,string cid,string start,string stop,string day) {//¶ÔÌØ¶¨Ñ§ºÅÅÅ¿Î
+void ScheduleSetByStu(string sid,string cid,string start,string stop,string day) {//å¯¹ç‰¹å®šå­¦å·æ’è¯¾
 	string str = "call ScheduleSetByStu(";
 	str += quote + sid + quote + comma + quote + cid + quote + comma + quote + start + quote + comma + quote + stop + quote + comma + day + rb + semi;
 	Query(str.c_str());
 }
 
-void ScheduleSetByCls(string dep, string grd, string cls, string cid, string start, string stop, string day,vector<string>&data) {//¶ÔÒ»¸ö°àÅÅ¿Î
+void ScheduleSetByCls(string dep, string grd, string cls, string cid, string start, string stop, string day,vector<string>&data) {//å¯¹ä¸€ä¸ªç­æ’è¯¾
 	SelectStuSameCls(dep,grd,cls,data);
-	for (auto sid : data) {//¶ÔÓ¦µÃµ½µÄÃ¿Ò»¸ösid¶¼²åÈëÏàÓ¦µÄÊ±¼ä±í
+	for (auto sid : data) {//å¯¹åº”å¾—åˆ°çš„æ¯ä¸€ä¸ªsidéƒ½æ’å…¥ç›¸åº”çš„æ—¶é—´è¡¨
 		string str = "call ScheduleSetByStu(";
 		str += quote + sid + quote + comma + quote + cid + quote + comma + quote + start + quote + comma + quote + stop + quote + comma + day + rb + semi;
 		Query(str.c_str());
 	}
 }
-void ScheduleSetByCid(string cid, string start, string stop, string day, vector<string>&data) {//¶ÔÒ»¸ö°àÅÅ¿Î cidÎªcourseid
+void ScheduleSetByCid(string cid, string start, string stop, string day, vector<string>&data) {//å¯¹ä¸€ä¸ªç­æ’è¯¾ cidä¸ºcourseid
 	SelectStuSameCid(cid, data);
-	for (auto sid : data) {//¶ÔÓ¦µÃµ½µÄÃ¿Ò»¸ösid¶¼²åÈëÏàÓ¦µÄÊ±¼ä±í
+	for (auto sid : data) {//å¯¹åº”å¾—åˆ°çš„æ¯ä¸€ä¸ªsidéƒ½æ’å…¥ç›¸åº”çš„æ—¶é—´è¡¨
 		string str = "call ScheduleSetByStu(";
 		str += quote + sid + quote + comma + quote + cid + quote + comma + quote + start + quote + comma + quote + stop + quote + comma + day + rb + semi;
 		Query(str.c_str());
 	}
 }
 
-void SelectStuSameCls(string dep,string grd ,string cls,vector<string>&data ) {//Ñ¡³öÍ¬Ò»¸ö°àµÄËùÓĞÑ§Éú
+void SelectStuSameCls(string dep,string grd ,string cls,vector<string>&data ) {//é€‰å‡ºåŒä¸€ä¸ªç­çš„æ‰€æœ‰å­¦ç”Ÿ
 	string str = "call SelectStuSameCls(";
 	str  += quote + dep + quote + comma + quote + grd + quote + comma + quote + cls + quote + rb + semi;
 	Query(str.c_str(),data);
 }
 
-void SelectStuSameCid(string cid, vector<string>&data) {//Ñ¡³öÍ¬Ò»¸öcourseµÄËùÓĞÈË
+void SelectStuSameCid(string cid, vector<string>&data) {//é€‰å‡ºåŒä¸€ä¸ªcourseçš„æ‰€æœ‰äºº
 	string str = "call SelectStuSameCid(";
 	str += quote + cid + quote + rb + semi;
 	Query(str.c_str(), data);

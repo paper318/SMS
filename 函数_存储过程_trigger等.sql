@@ -39,8 +39,7 @@ passwd nvarchar(20)
 );
 -- 管理员
 create table manager(
-man_i
-d nvarchar(20) not null primary key,
+man_id nvarchar(20) not null primary key,
 name nvarchar(20),
 passwd nvarchar(20),
 );
@@ -69,7 +68,7 @@ primary key(stu_id,course_id,tea_id)
 create table grade(
 stu_id nvarchar(20) not null,
 course_name nvarchar(20) not null,
-grade numeric(10.2),
+score numeric(10.2),
 primary key(stu_id,course_name)
 );
 --教材
@@ -108,78 +107,19 @@ name nvarchar(20)
 
 
 
-
---生成考试安排表的思路如下：
-教室一个时间段内能使用的时间一定（需要一个表classroom 记录教室数量如（room_id,limit_num）），全校所有科目需要考试的时间一定，
-所有排法应该是用一个表记录每个需要考试的科目（course表大致能实现这个功能，需要的信息（课程id,class）注意一个班按人数可以能需要填入多个相同的信息，比如150人的一个班考大物，则需要填入3个相同的信息段，分成3个部分，因此可以再补充1,2，3数字，与前面两个字段合并成主码）
-以时间顺序开始分配，可以采用下列规则:
-给所有课程编号，像填空格一样，把课程填入空教室，依次填，一直到所有课程全部填入教室，安排结束
-填的过程中要考虑几个条件
-1.一个课程必须在同一个时间段内考完，如大物都得在同一天的同上午或者下午考完，不允许跨时间段，处理时就是要求插入时检查表里已经存在的相同的课程的时间段，后面插入的就得填入和前面插入的同一个时间段，如果是第一个插入的就选一个最近的时间就好
-2.同一个院一个专业同一个年级在一个时间段内只能进行一门考试，也就是说上午考数据库的同时，不能再安排c++，但可以安排其他院的考试科目，
-	这就要求我们在插入时，检查是否这个一个时间段内是否存在着院、专业、年级一样的考试：如果不存在，那就直接插入，如果存在，就检查将要插入的与表里存在的是否是同一个科目，如果是，插入，如果不是，拒绝插入
-3.每次插入一个考试安排后，在那个记录着等待安排的考试科目的表中删除对应的行，因为它已经被安排了	
-总结起来：
-结束循环的判断条件是：需要安排的考试科目的那个表是否为空
-循环以时间的推进进行，从规定的考试周开始那个日期开始：伪代码如下：
-do{
-for(开始的日期start;这个时间段还有能安排的教室&&还有需要安排的教室 ;)
-{
-	插入；
-}
-start++;  //进入下一个时间段
-
-}while(还有需要安排的考试)
-
-有一点需要注意，当教室很少的情况下，这样写程序肯定会出问题，因为结合上面的条件可以知道，一个学校的教室最多能容纳100个人，却招了101人，这个时候有两种错误的情况：一.101人同时考一门科目，比如全校同时考毛概，这个分配系统会怎么样呢。前面100人都没问题，最后一个人插入的时候，问题来了，
-插入会被拒绝，因为当前时间段，人已经满了，插入其他时间段同样会被拒绝，因为同一个科目，不允许两个时间段考试，所以是死循环且没办法解决。二，101人同时考两门或者以上的不同科目，前面100人没问题，但最后1人插入，问题又来了，插入当前时间段会被拒绝，因为没位置，满了，
-插入其他时间段同样被拒绝，因为同一个科目不允许两个时间段考试。这个问题能够解决，就是移除与发生错误的这个人考试科目相同的那些安排，重新在下一个时间段统一插入。
-
-错误总结就是：
-如果某一门科目需要安排的考试人数大于一个时间段内能提供的最大座位数量，那就死循环了，所以得增加一个条件先判断，避免死循环
-在排除了第一种错误后，如果多门科目需要安排的考试人数大于一个时间段内能提供的最大座位数量，需要解决上面守的问题，很简单，就把已经插入的那些人取出来，放到下个时间段就好。
-
-
-最后生成的表应该为
-
 -- 考试
 create table test(
 room_id nvarchar(20) not null primary key, 
 limit_num numeric(10.2),
-course_name 
-class_id    
+course_name  nvarchar(20),
+class_id     nvarchar(20),
+Tea_id    nvarchar(20),
 time_start datetime,  
 time_stop datetime
 );
 
 
---监考教师表 根据test 表用存储过程生成
---表结构如下：
-create table invigilator
-( tea_id nvarchar(20),
-  room_id nvarchar(20),
-  time_start datetime,
-  time_stop datetime,
- );
 
-还是一个填空格的游戏，对应考试表里的每一行数据，都得安排一个老师监考，同一个时间段内，一名老师只能监考一个考试
-过程是这样的：
-从头将考试安排表按行扫描，每读一行，就读取他的时间段，教室，然后从监考老师表（就是那些任课老师teacher表）中依次读取
-老师，然后插入一个新表，每次插入都检查：这个时间段内，这名老师有没有监考，没有的话，插入；有的话换老师。当然也会出现老师总数少于每天的考场安排的，这个时候，肯定又会出bug，
-具体分析和上面一样，但如果在进行这个考试安排表之前，就根据每个时间段能监考的老师最大数量设置为每个时间段能安排的考试最大数量，就可以消除bug
-
-总得来说，就是在一个时间段内：同一个科目的考生、考场能容纳的最大数量、能提供的监考老师、每个时间段安排的考场，都得符合逻辑规则才行。
-同一个科目的考生是确定、考场能容纳的最大数量、能提供的监考老师都是安排前都已经知道的，这种失衡无法改变，但每个时间段安排的考场数却能根据前面3个设定一个合理
-的上限。提前设置上限，非常有必要。
-
---学生考试表 根据test生成
---表的结构如下
-create table stu_test
-( name nvarchar(200),
-  room_id nvarchar(20),
-  time_start datetime,
-  time_stop datetime,
- )
 
 --教学计划  
 create table poject(
@@ -348,9 +288,73 @@ msg TEXT
 			where(student.stu_id=id)
 		end //
 		delimiter ;
+--管理员
+		--登录
+		delimiter //
+		create function PasswdMan(id nvarchar(20), key nvarchar(20))
+			returns nvarchar(50)
+			begin 
+				if(id in
+					(select man_id from manager where passwd =key and man_id=id
+					))
+				then return "Success";
+				else
+				return "Failed";
+				end if;能
+			end //
+		delimiter
 		
 		
-			
+--成绩管理
+		--//打印老师各自所开课程的学生的成绩
+		delimiter //
+		create procedure TeaPrintGrades()
+		begin
+			select course.tea_id,course.course_id,course.course_name,course.stu_id,grade
+			from grade join course on(grade.course_id=course.course_id and grade.tea_id=course.tea_id)
+			group by tea_id;
+		end //
+		delimiter ;
+		
+		--//按学号打印学生所有课程成绩
+		delimiter //
+		create procedure StuPrintGrades()
+		begin
+			select stu_id,course.course_id,course.course_name
+			from grade join course on (course.tea_id=grade.tea_id and grade.course_id=course.course_id)
+			group by stu_id;
+		end //
+		delimiter ;
+		
+		--//按学院，总分排名并且打印学生课程成绩
+		delimiter //
+		create procedure DepGradesSort()
+		begin
+			select student.dep_id,student.stu_id,sum(grade) as total_score
+			from grade join course on(course.tea_id=grade.tea_id and grade.course_id=course.course_id)
+					   join  student on (grade.stu_id=student.stu_id)
+			group by student.dep_id,student.stu_id
+			order by total_score;
+		end //
+		delimiter ;
+		
+		--//按学院，学位课计算分数段
+		delimiter //
+		create procedure GradesDistri()
+		begin
+		
+			select student.dep_id,grade.course_id
+			sum(grade.score<60 then 1 else 0 end ) as '0~59',
+			sum(grade.score>=60 and grade.score <70 then 1 else 0 end) as '60~69',
+			sum(grade.score>=70 and grade.score <80 then 1 else 0 end) as '70~79',
+			sum(grade.score>=80 and grade.score <90 then 1 else 0 end) as '80~89',
+			sum(grade.score>=90 and grade.score <=100 then 1 else 0 end) as '90~100'
+			from grade join student on (grade.stu_id=student.stu_id)
+			group by student.dep_id,grade.course_id;
+		end //
+		delimiter ;
+		
+		
 		
 		
 		
@@ -402,6 +406,22 @@ msg TEXT
 				where course.course_id = sec.course_id and sec.stu_id = student.stu_id and course.course_id = id;
 			end	
 		delimiter ;
+		
+
+
+
+--考务管理
+		--打印考试安排
+		delimiter //
+		create procedure PrintInfo()
+		begin
+			select class_id,course_id,room_id,time_start,time_stop,tea_id
+			from test 
+		end //
+		delimiter ;
+		
+	
+			
 		
 
 -- 开课管理

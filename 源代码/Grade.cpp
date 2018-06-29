@@ -1,6 +1,80 @@
 #include"Grade.hpp"
-void InputGrades();//学生成绩录入
-				   //成绩转存什么意思
-void PrintGrades();//打印成绩   b	课程成绩单（教师）、学生成绩通知单、学生毕业成绩表输出到txt
-void GradesSort();// 成绩排名
-void GradesDistri();// 及分数段统计（按总分 / 学位课成绩排名）
+#include"MyownSQL.hpp"
+#include<string>
+#include<iostream>
+#include<fstream>
+#include<vector>
+using namespace std;
+void InputGrades() //瀛︾敓鎴愮哗褰曞叆,鎵嬪姩
+{
+	std::string str, sqlstr;
+	while (getline(cin, str))
+	{
+		sqlstr += str;
+		str.clear();
+	}
+	Query(sqlstr.c_str());
+
+}
+				  
+void TeaPrintGrades() //鎸夋暀甯坕d锛屾墦鍗拌绋嬫垚缁ヾ
+{	string filename;
+	cout << "please import the address of file which you want to save as: " << endl;
+	cin >> filename;
+	fstream file(filename);
+	if (!file.is_open()) {
+		cout << "Error opening file" << endl;
+		return;
+	}
+	string str = "call TeaPrintGrades();";
+	Query(str.c_str(), &file);
+}
+
+void StuPrintGrades() //鎸夊鐢焛d锛屾墦鍗拌绋嬫垚缁ヾ
+{
+	string filename;
+	cout << "please import the address of file which you want to save as: " << endl;
+	cin >> filename;
+	fstream file(filename);
+	if (!file.is_open()) {
+		cout << "Error opening file" << endl;
+		return;
+	}
+	string str = "call StuPrintGrades();";
+	Query(str.c_str(), &file);
+}
+
+void DepGradesSort()// 鎸夊闄紝鎬诲垎鎵撳嵃鎺掑悕 
+{	string filename;
+	cout << "please import the address of file which you want to save as: " << endl;
+	cin >> filename;
+	fstream file(filename);
+	if (!file.is_open()) {
+		cout << "Error opening file" << endl;
+		return;
+	}
+	string str = "call DepGradesSort();";
+	Query(str.c_str(), &file);
+}
+
+
+
+
+
+void GradesDistri()     //鎸夊闄紝瀛︿綅璇剧粺璁″垎鏁版
+{
+	string filename;
+	cout << "please import the address of file which you want to save as: " << endl;
+	cin >> filename;
+	fstream file(filename);
+	if (!file.is_open()) {
+		cout << "Error opening file" << endl;
+		return;
+	}
+	string str = "call GradesDistri();";
+	Query(str.c_str(), &file);
+}
+
+
+
+             
