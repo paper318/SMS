@@ -1,16 +1,16 @@
-//Ñ¡¿Î¹ÜÀí
+//é€‰è¯¾ç®¡ç†
 #ifndef SELECT_H_
 #define SELECT_H_
- /*Ñ§Éú*/
-void DeleteCourse(string course_id, string stu_id);//É¾¿Î 
-void CourseSelected(string stu_id);//ÒÑÑ¡¿Î³Ì
-void SelectCourse(string course_id, string stu_id);//Ñ¡¿Î  ps:Ê±¼ä,Ñ¡¿ÎÊıÁ¿£¬²»ÄÜÑ¡Ñ¡ĞŞ¿Î ÓĞÏŞÖÆ¸ù¾İ¹ÜÀíÔ±¹æ¶¨  ´óÒ»²»ÄÜÑ¡
-void changePasswd(string stu_id, string new_password);//ĞŞ¸ÄÃÜÂë Õë¶ÔÑ§Éú
-void chagePasswd(string id, string new_password, string type);//Õë¶ÔÀÏÊ¦ºÍÆäËûÈÎºÎÈË typeÎªÆäËûµÄÈËÔ±±íÃû³Æ
-void CourseStat(string course_id);//»ñµÃÑ¡¿ÎĞÅÏ¢£¨¿Î³ÌºÍ¶ÔÓ¦Ñ¡¿ÎÈËÊıºÍ¸÷Ñ¡¿ÎÈË£©
+ /*å­¦ç”Ÿ*/ 
+void DeleteCourse(string course_id, string stu_id);//åˆ è¯¾ 
+void CourseSelected(string stu_id);//å·²é€‰è¯¾ç¨‹
+void SelectCourse(string course_id, string stu_id,string tea_id);//é€‰è¯¾  ps:æ—¶é—´,é€‰è¯¾æ•°é‡ï¼Œä¸èƒ½é€‰é€‰ä¿®è¯¾ æœ‰é™åˆ¶æ ¹æ®ç®¡ç†å‘˜è§„å®š  å¤§ä¸€ä¸èƒ½é€‰
+void changePasswd(string stu_id, string new_password);//ä¿®æ”¹å¯†ç  é’ˆå¯¹å­¦ç”Ÿ
+void chagePasswd(string id, string new_password, string type);//é’ˆå¯¹è€å¸ˆå’Œå…¶ä»–ä»»ä½•äºº typeä¸ºå…¶ä»–çš„äººå‘˜è¡¨åç§°
+void CourseStat(string course_id);//è·å¾—é€‰è¯¾ä¿¡æ¯ï¼ˆè¯¾ç¨‹å’Œå¯¹åº”é€‰è¯¾äººæ•°å’Œå„é€‰è¯¾äººï¼‰
 
- /*¹ÜÀíÔ±£¬ÀÏÊ¦*/
-void PrintCourseStat();//Ñ¡¿ÎĞÅÏ¢´òÓ¡£¨Êä³öµ½txt£©
+ /*ç®¡ç†å‘˜ï¼Œè€å¸ˆ*/
+void PrintCourseStat();//é€‰è¯¾ä¿¡æ¯æ‰“å°ï¼ˆè¾“å‡ºåˆ°txtï¼‰
 
 
 #endif

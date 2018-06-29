@@ -1,4 +1,3 @@
-
 #ifndef MANAGER_H_
 #define MANAGER_H_
 #include<string>
@@ -13,7 +12,7 @@ public:
 	int Load(string id, string password);
 
 	/*更改账户*/
-	void ChangePassword();//对任何用户可以更改密码
+	void ChangePassword();//管理员用sql语句update用户账户密码
 
 	//					  /*选课*/
 	//void OpenCourse();//添加课程用于选课，并设置选课时间，选课数，针对大一不能选选修课
@@ -30,7 +29,7 @@ public:
 
 					   /*成绩管理*/
 	//void InputGrades();//学生成绩录入
-				   //成绩转存什么意思
+	//				   //成绩转存什么意思
 	//void PrintGrades();//打印成绩   b	课程成绩单（教师）、学生成绩通知单、学生毕业成绩表输出到txt
 	//void GradesSort();// 成绩排名
 	//void GradesDistri();// 及分数段统计（按总分 / 学位课成绩排名）

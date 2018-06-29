@@ -2,42 +2,44 @@
 #define OPEN_H_
 
 #include <string>
-
- /*½ÌÊ¦*/
+ 
+ /*æ•™å¸ˆ*/
 void OpenCourse(string course_id, string course_name, string start, string stop, string tea_id, string num, string credit);
-//Ìí¼Ó¿Î³ÌÓÃÓÚÑ¡¿Î£¬²¢ÉèÖÃÑ¡¿ÎÊ±¼ä£¬Ñ¡¿ÎÊı£¬Õë¶Ô´óÒ»²»ÄÜÑ¡Ñ¡ĞŞ¿Î
-void CreateProject(string course_id, string tea_id, string text);// ½ÌÑ§¼Æ»®ĞÅÏ¢²éÑ¯´¦ÀíºÍ·¢²¼£¿£¿£¿
+//æ·»åŠ è¯¾ç¨‹ç”¨äºé€‰è¯¾ï¼Œå¹¶è®¾ç½®é€‰è¯¾æ—¶é—´ï¼Œé€‰è¯¾æ•°ï¼Œé’ˆå¯¹å¤§ä¸€ä¸èƒ½é€‰é€‰ä¿®è¯¾
+void CreateProject(string course_id, string tea_id, string text);// æ•™å­¦è®¡åˆ’ä¿¡æ¯æŸ¥è¯¢å¤„ç†å’Œå‘å¸ƒï¼Ÿï¼Ÿï¼Ÿ
 void SelectProject(string course_id, string tea_id)
-//²é¿´½ÌÑ§ĞÅÏ¢
+//æŸ¥çœ‹æ•™å­¦ä¿¡æ¯
 void QueryStudent(string tea_id);
-//²éÑ¯Ëù´øÑ§Éú£¬¿ÉÒÔ²éÑ¯¸÷Ñ§ÉúÕâÃÅ¿Î³É¼¨
+//æŸ¥è¯¢æ‰€å¸¦å­¦ç”Ÿï¼Œå¯ä»¥æŸ¥è¯¢å„å­¦ç”Ÿè¿™é—¨è¯¾æˆç»©
 void QueryCourse(string tea_id);
-//²éÑ¯×Ô¼º¿ªµÄ¿Î³Ì£¬¸÷¿Î³ÌÑ¡¿ÎÇé¿ö
+//æŸ¥è¯¢è‡ªå·±å¼€çš„è¯¾ç¨‹ï¼Œå„è¯¾ç¨‹é€‰è¯¾æƒ…å†µ
 
-/*¹ÜÀíÔ±*/
+/*ç®¡ç†å‘˜*/ 
 void QueryBooks(string book_id);
-//½Ì²Ä¿âĞÅÏ¢(Ãû³Æ£ºÊıÁ¿)
+//æ•™æåº“ä¿¡æ¯(åç§°ï¼šæ•°é‡)
 void UpdateBooks(string book_id, string name, string num);
-//¸üĞÂ½Ì²ÄĞÅÏ¢
+//æ›´æ–°æ•™æä¿¡æ¯
 void CourseInfoQuery();
-//¿ª¿ÎÄ¿Â¼ĞÅÏ¢²éÑ¯
+//å¼€è¯¾ç›®å½•ä¿¡æ¯æŸ¥è¯¢
 void SetClass(int num);
-//·ÖÅä°à¼¶£¬·ÖÅäÑ§ºÅ Ó¦¸ÃÊÇ×î¿ªÊ¼Íê³É£¬Í¨¹ı´ÓÎÄ¼şÖĞ¶ÁÈ¡ËùÓĞµÄĞÅÏ¢£¬È»ºó°´ÕÕĞèÇóÃ¿°à¶àÉÙÈË£¬½øĞĞ·ÖÅä
-void CreateStu(int id, string name, int cls, int grade, string department, string passwd);
-//ĞÂ½¨Ò»¸öÑ§Éú
+//åˆ†é…ç­çº§ï¼Œåˆ†é…å­¦å· åº”è¯¥æ˜¯æœ€å¼€å§‹å®Œæˆï¼Œé€šè¿‡ä»æ–‡ä»¶ä¸­è¯»å–æ‰€æœ‰çš„ä¿¡æ¯ï¼Œç„¶åæŒ‰ç…§éœ€æ±‚æ¯ç­å¤šå°‘äººï¼Œè¿›è¡Œåˆ†é…
+
+void CreateStu(int id, string name, int cls, int grade, string dep_id, string dep_name, string school_roll, string major_status, string passwd) {//æ–°å»ºä¸€ä¸ªå­¦ç”Ÿ ,ä¹Ÿå¯ç”¨äºå•ç‹¬æ–°å»ºä¸€ä¸ªå­¦ç”Ÿ
+
+//æ–°å»ºä¸€ä¸ªå­¦ç”Ÿ
 void ModifyClass(string stu_id, string cls);
-//·Ö°àµ÷Õû£¬£¨Ñ§Éú¸ü¸Ä°à£©
-void GetClass(); //·Ö°àµÄÇé¿ö £¨¸÷°àÈË £¬ĞÕÃû£©
+//åˆ†ç­è°ƒæ•´ï¼Œï¼ˆå­¦ç”Ÿæ›´æ”¹ç­ï¼‰
+void GetClass(); //åˆ†ç­çš„æƒ…å†µ ï¼ˆå„ç­äºº ï¼Œå§“åï¼‰
 
-//ÅÅ¿Î³Ì±í
-void ScheduleSetByStu(string sid, string cid, string start, string stop, string day) {//¶ÔÌØ¶¨Ñ§ºÅÅÅ¿Î
-void ScheduleSetByCls(string dep, string grd, string cls, string cid, string start, string stop, string day, vector<string>&data) {//¶ÔÒ»¸ö°àÅÅ¿Î
-void ScheduleSetByCid(string cid, string start, string stop, string day, vector<string>&data) {//¶ÔÒ»¸ö°àÅÅ¿Î cidÎªcourseid
-void SelectStuSameCls(string dep, string grd, string cls, vector<string>&data) {//Ñ¡³öÍ¬Ò»¸ö°àµÄËùÓĞÑ§Éú
-void SelectStuSameCid(string cid, vector<string>&data) {//Ñ¡³öÍ¬Ò»¸öcourseµÄËùÓĞÈË
+//æ’è¯¾ç¨‹è¡¨
+void ScheduleSetByStu(string sid, string cid, string start, string stop, string day) {//å¯¹ç‰¹å®šå­¦å·æ’è¯¾
+void ScheduleSetByCls(string dep, string grd, string cls, string cid, string start, string stop, string day, vector<string>&data) {//å¯¹ä¸€ä¸ªç­æ’è¯¾
+void ScheduleSetByCid(string cid, string start, string stop, string day, vector<string>&data) {//å¯¹ä¸€ä¸ªç­æ’è¯¾ cidä¸ºcourseid
+void SelectStuSameCls(string dep, string grd, string cls, vector<string>&data) {//é€‰å‡ºåŒä¸€ä¸ªç­çš„æ‰€æœ‰å­¦ç”Ÿ
+void SelectStuSameCid(string cid, vector<string>&data) {//é€‰å‡ºåŒä¸€ä¸ªcourseçš„æ‰€æœ‰äºº
 
 
-extern int stu_count;//Ñ§ÉúÊıÍ³¼Æ£¬±ãÓÚÑ§ºÅµÄ±àĞ´
+extern int stu_count;//å­¦ç”Ÿæ•°ç»Ÿè®¡ï¼Œä¾¿äºå­¦å·çš„ç¼–å†™
 
 
 

@@ -7,7 +7,7 @@ create table department
  
  --班
  create table class
-(	dep_id nvarchar(200,
+(	dep_id nvarchar(20),
 	class_id nvarchar(20) not null primary key,
 )
 
@@ -16,7 +16,7 @@ create table department
 create table student(
 dep_id nvarchar(20),--系
 class_id int,
-Grade int,
+stuGrade int,
 name nvarchar(20),
 stu_id nvarchar(20) not null primary key ,
 passwd nvarchar(20),
@@ -29,6 +29,7 @@ create table teacher(
 tea_id nvarchar(20) not null primary key,
 name nvarchar(20),
 passwd nvarchar(20),
+dep_id nvarchar(20)
 );
 -- 领导
 create table leader(
@@ -107,6 +108,7 @@ name nvarchar(20)
 
 
 
+
 -- 考试
 create table test(
 room_id nvarchar(20) not null primary key, 
@@ -119,6 +121,34 @@ time_stop datetime
 );
 
 
+<
+--监考教师表 根据test 表用存储过程生成
+--表结构如下：
+create table invigilator
+( tea_id nvarchar(20),
+  room_id nvarchar(20),
+  time_start datetime,
+  time_stop datetime,
+ );
+
+还是一个填空格的游戏，对应考试表里的每一行数据，都得安排一个老师监考，同一个时间段内，一名老师只能监考一个考试
+过程是这样的：
+从头将考试安排表按行扫描，每读一行，就读取他的时间段，教室，然后从监考老师表（就是那些任课老师teacher表）中依次读取
+老师，然后插入一个新表，每次插入都检查：这个时间段内，这名老师有没有监考，没有的话，插入；有的话换老师。当然也会出现老师总数少于每天的考场安排的，这个时候，肯定又会出bug，
+具体分析和上面一样，但如果在进行这个考试安排表之前，就根据每个时间段能监考的老师最大数量设置为每个时间段能安排的考试最大数量，就可以消除bug
+
+总得来说，就是在一个时间段内：同一个科目的考生、考场能容纳的最大数量、能提供的监考老师、每个时间段安排的考场，都得符合逻辑规则才行。
+同一个科目的考生是确定、考场能容纳的最大数量、能提供的监考老师都是安排前都已经知道的，这种失衡无法改变，但每个时间段安排的考场数却能根据前面3个设定一个合理
+的上限。提前设置上限，非常有必要。
+
+--学生考试表 根据test生成
+--表的结构如下
+create table stu_test
+( name nvarchar(200),
+  room_id nvarchar(20),
+  time_start datetime,
+  time_stop datetime,
+ )
 
 
 --教学计划  
@@ -149,16 +179,16 @@ msg TEXT
 
 		-- //学生查成绩
 		delimiter //
-		create procedure GetGrades(identity nvarchar(20))
+		create procedure GetGrades(id nvarchar(20))
 			begin 
-				select student.name ,course.course_name,grade.grade,course.credit
+				select student.name ,course.course_name,grade.score,course.credit
 				from student,grade,course
-				where student.stu_id=grade.stu_id and student.stu_id=grade.stu_id and course.course_name = grade.course_name;
+				where student.stu_id=grade.stu_id and student.stu_id=grade.stu_id and course.course_name = grade.course_name and student.stu_id=id;
 				
 				select student.name,sum(course.credit)
 				from student,course,grade
-				where student.stu_id=grade.stu_id and student.stu_id=grade.stu_id and course.course_name = grade.course_name
-					and grade.grade>60 
+				where student.stu_id=grade.stu_id and student.stu_id=grade.stu_id and course.course_name = grade.course_name 
+						and student.stu_id=id and grade.score>60 
 				group by student.name ;
 
 			end //
@@ -288,6 +318,7 @@ msg TEXT
 			where(student.stu_id=id)
 		end //
 		delimiter ;
+
 --管理员
 		--登录
 		delimiter //
@@ -310,7 +341,7 @@ msg TEXT
 		delimiter //
 		create procedure TeaPrintGrades()
 		begin
-			select course.tea_id,course.course_id,course.course_name,course.stu_id,grade
+			select course.tea_id,course.course_id,course.course_name,course.stu_id,score
 			from grade join course on(grade.course_id=course.course_id and grade.tea_id=course.tea_id)
 			group by tea_id;
 		end //
@@ -320,7 +351,7 @@ msg TEXT
 		delimiter //
 		create procedure StuPrintGrades()
 		begin
-			select stu_id,course.course_id,course.course_name
+			select stu_id,course.course_id,course.course_name,score
 			from grade join course on (course.tea_id=grade.tea_id and grade.course_id=course.course_id)
 			group by stu_id;
 		end //
@@ -330,7 +361,7 @@ msg TEXT
 		delimiter //
 		create procedure DepGradesSort()
 		begin
-			select student.dep_id,student.stu_id,sum(grade) as total_score
+			select student.dep_id,student.stu_id,sum(score) as total_score
 			from grade join course on(course.tea_id=grade.tea_id and grade.course_id=course.course_id)
 					   join  student on (grade.stu_id=student.stu_id)
 			group by student.dep_id,student.stu_id
@@ -354,11 +385,6 @@ msg TEXT
 		end //
 		delimiter ;
 		
-		
-		
-		
-		
-		
 	
 
 --选课管理
@@ -373,15 +399,16 @@ msg TEXT
 		create procedure CourseSlected( id nvarchar(20))
 				select * from sec where sec.stu_id = id;
 		delimiter ;
+		
 		-- 选课
 		delimiter //
-		create function SelectCourse( cid nvarchar(20)，sid nvarchar(20))
+		create function SelectCourse( cid nvarchar(20),sid nvarchar(20),tid nvarchar(20))
 			returns nvarchar(40)
 			
 			begin
-				if (select Grade from student where student.id= sid) != 1 and (select opent from course where cid=course.course_id)>NOW()and(select closet from course where cid=course.course_id)<NOW()
+				if (select student.stuGrade from student where student.id= sid) != 1 and (select opent from course where cid=course.course_id)>NOW()and(select closet from course where cid=course.course_id)<NOW()
 				then
-					insert into sec(stu_id,course_id) values(sid,cid);
+					insert into sec(stu_id,course_id,tea_id) values(sid,cid,tid);
 				else
 					return	"不满足选课条件";	
 				end if
@@ -400,15 +427,14 @@ msg TEXT
 				select course.course_id,course.course_name,count(sec.stu_id) as sum
 				from course,student,sec 
 				where course.course_id = sec.course_id and sec.stu_id = student.stu_id and course.course_id = id;
-				--课程选课人
-				select course.course_id,course.course_name,student.name 
-				from course,studen,sec
-				where course.course_id = sec.course_id and sec.stu_id = student.stu_id and course.course_id = id;
+
+				--课程选课人 
+				select course.course_id,course.course_name,student.name,teacher.name
+				from course,studen,sec,teacher
+				where course.course_id = sec.course_id and sec.stu_id = student.stu_id and course.course_id = id and sec.tea_id = teacher.tea_id;
 			end	
 		delimiter ;
 		
-
-
 
 --考务管理
 		--打印考试安排
@@ -421,14 +447,11 @@ msg TEXT
 		delimiter ;
 		
 	
-			
-		
-
 -- 开课管理
 		-- 开课
 		delimiter //
-		create procedure OpenCourse( id nvarchar(20),name nvarchar(20),start nvarchar(50),stop nvarchar(50),id nvarchar(20) , n int,cre numeric(10.2))
-				insert into Course(course_id,course_name,opent,closet,tea_id,course_name,num,credit) values(id,name,start,stop,id,n,cre);
+		create procedure OpenCourse( tid nvarchar(20),id nvarchar(20),name nvarchar(20),start nvarchar(50),stop nvarchar(50),id nvarchar(20) , n int,cre numeric(10.2))
+				insert into Course(tea_id,course_id,course_name,opent,closet,tea_id,course_name,num,credit) values(tid,id,name,start,stop,id,n,cre);
 		delimiter ;
 
 		--创建教学计划
@@ -444,14 +467,14 @@ msg TEXT
 		--查看所带学生的成绩
 		delimiter //
 		create procedure QueryStudent(id nvarchar(20))
-			select sec.stu_id,student.stu_name,grade.grade from student,grade,sec,course
-			where sec.stu_id = grade.stu_id and sec.course_id = course.course_id and course.course_name = grade.course_name and id = course.tea_id and sec.stu_id= student.stu_id
+			select sec.stu_id,student.stu_name,grade.score from student,grade,sec,course
+			where sec.tea_id = course.tea_id and sec.stu_id = grade.stu_id and sec.course_id = course.course_id and course.course_name = grade.course_name and id = course.tea_id and sec.stu_id= student.stu_id
 		delimiter ;
 		-- 查询开课信息
 		delimiter //
-		create procedure QueryCourse(id nvarchar(20))
-			select sec.stu_id,student.stu_name from student,sec,course
-			where sec.stu_id = grade.stu_id and sec.course_id = course.course_id and id = course.tea_id and sec.stu_id= student.stu_id
+		create procedure QueryCourse(tid nvarchar(20))
+			select sec.stu_id,student.stu_name from student,sec
+			where sec.stu_id = student.stu_id and sec.tea_id = tid;
 		delimiter ;
 		-- 查询教材库
 		delimiter //
@@ -472,9 +495,18 @@ msg TEXT
 		-- 开课目录信息查询
 		create procedure CourseInfoQuery()
 			select * from course;
+			
 		--导入学生信息
-		create procedure CreateStu(id nvarchar(20),na nvarchar(20), cls int,  gr int, dep nvarchar(20), pw nvarchar(20))
-			insert into student(stu_id,name,grade,department,passwd) values(id,na,cls,gr,dep,pw);
+		--开始学生应该统一导入，班级也是统一分配的，
+		delimiter //
+		create procedure CreateStu(id nvarchar(20),na nvarchar(20), cls int,  gr int, did nvarchar(20), dname  nvarchar(20), pw nvarchar(20))
+			begin 
+			insert into student(stu_id,name,stuGrade,dep_id,passwd) values(id,na,cls,gr,did,pw);
+			insert into class (dep_id,class_id) values(did,cls);
+			insert into department(dep_id,name) values(did,dname);
+			end;
+		delimiter;
+
 		--修改班级
 		create procedure ModifyClass( id nvarchar(20),cls int)
 			update student set class = cls where id = stu_id;
@@ -501,7 +533,7 @@ msg TEXT
 			--同一个班的所有学生id
 			delimiter//
 			create procedure SelectStuSameCls(dep nvarchar(20),grd int,cls int)
-				select stu_id from student where department = dep and grade = grd,class = cls;
+				select stu_id from student,class where dep_id = dep_id and stuGrade = grd,class.class_id = cls;
 			delimiter ;
 
 			--同一个课程所有学生的id

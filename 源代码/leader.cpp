@@ -3,32 +3,32 @@
 #include<vector>
 
 int Leader::Load()//登录
-{//返回2：登录成功，-1：失败，0：程序其他错误
+{//返回2：登录成功，返回-1：账号密码错误，返回0：程序运行错误
 		string str = "select PasswdLea( ";
 		str += quote + id + quote + comma + quote + password + quote + rb + semi;
 		int token = Query(str.c_str(),int(2));
-		//int(2）唯一的意义提供一个int参数就是对query重载识别
+		//int(2）唯一的作用是提供一个int型参数区别重载版本
 		return token;
 }
 
 string Leader::getdep_id()
-{
+{  //用来返回学院领导所在院的dep_id
 	string str = "call getdep_id(";
 	str += quote + id + quote + rb + semi;
-	vector<vector<string>> data; //data是一个结果集，存储多个表
+	vector<vector<string>> data; 
 	if (!Query(str.c_str(), data))
 		return data[0][0]; 
 	else return "faild";
 }
 
-void Leader::StudentCount() //查询整个院的学生人数
+void Leader::StudentCount() //查询本院学生人数
 {
 	string str = "call  StudentCount(";
 	str += quote + id + quote + rb + semi;
 	Query(str.c_str());
 }
 
-void Leader::LeaCourseStat() //查询本院的开课统计，(开了哪些课，每个选课人数)
+void Leader::LeaCourseStat() //查询本院的开课统计(开了哪些课，每个选课人数)
 {
 	string str = "call LeaCourseStat(";
 	str += quote + id + quote + rb + semi;
@@ -37,10 +37,9 @@ void Leader::LeaCourseStat() //查询本院的开课统计，(开了哪些课，
 }
 
 
-					 //任课教师可以查询自己开设的课程，并进行核准确认。暂不实现，不好测试  
-int Leader::LeaQueryTea(string coursename)  //输入课程或得到老师和老师相关信息
+int Leader::LeaQueryTea(string coursename)  //按课程名查询老师相关信息
 {	
-	string dep_id = this->getdep_id(); //成功返回该用户的dep_id,失败返回string "faild"
+	string dep_id = this->getdep_id(); //成功则返回dep_id,否则返回string "faild"
 	string s = "faild";
 	if (dep_id == s) {
 		cout << "query faild,can't get user's dep_id" << endl;
@@ -51,7 +50,7 @@ int Leader::LeaQueryTea(string coursename)  //输入课程或得到老师和老�
 	Query(str.c_str());
 	return 1;
 }
-void Leader::LeaQueryStu(string stu_id) //按学生学号查询学生的相关信息(班级，选课，，成绩等)
+void Leader::LeaQueryStu(string stu_id) //按学生学号查询学生的相关信息(班级，选课等)
 {
 	string str = "call LeaQueryStu(";
 	str += quote + stu_id + quote + rb + semi;

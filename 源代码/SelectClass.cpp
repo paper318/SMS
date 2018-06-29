@@ -3,6 +3,7 @@
 #include"MyownSQL.hpp"
 #include<fstream>
 using namespace std;
+
 /*学生 角色区分建议保留 界面好写点*/
 
 
@@ -16,9 +17,9 @@ void CourseSelected(string stu_id) {//已选课程
 	str += quote + stu_id + quote + rb + semi;
 	Query(str.c_str(), "查询成功选课成功", "查询选课失败");
 }
-void SelectCourse(string course_id, string stu_id) {//选课  ps:时间,选课数量，不能选选修课 有限制根据管理员规定  大一不能选
+void SelectCourse(string course_id, string stu_id,string tea_id) {//选课  ps:时间,选课数量，不能选选修课 有限制根据管理员规定  大一不能选
 	string str = "select SelectCourse(";
-	str += quote + course_id + quote + comma + quote + stu_id + quote + rb + semi;
+	str += quote + course_id + quote + comma + quote + stu_id + quote +comma+quote+tea_id+quote+ rb + semi;
 	Query(str.c_str());
 }
 
