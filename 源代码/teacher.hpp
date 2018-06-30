@@ -1,4 +1,4 @@
-#ifndef TEACHER_H_
+﻿#ifndef TEACHER_H_
 #define TEACHER_H_
 #include<string>
 using namespace std;
@@ -8,6 +8,7 @@ private:
 	string password;
 public:
 	Teacher(string a, string b) :id(a), password(b) {};
+	Teacher() {};
 	~Teacher() {};
 
 	int Load();//老师登录

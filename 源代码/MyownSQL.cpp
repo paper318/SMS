@@ -1,8 +1,8 @@
 #include"MyownSQL.hpp"
 #include<vector>
 #include<iostream>
-MYSQL myobj;
-string comma = ",", plus = "+", quote = "\"", space = " ", lb = "(", rb = ")", semi = ";", colon = ":", hyphen = "-";
+extern MYSQL myobj;
+extern string comma = ",", plus = "+", quote = "\"", space = " ", lb = "(", rb = ")", semi = ";", colon = ":", hyphen = "-";
 
 
 //初始化数据库
@@ -122,18 +122,11 @@ int Query(const char * sqlstr, int token) {  // 这个token参数唯一作用就
 }
 
 
-//执行mysql语句，将结果集中的所有表存储到vector<vector<string>> data 中返回
-int Query(const char * sqlstr, vector<vector<string>> &data) {
+//执行mysql语句，将结果集中的所有表存储到vector<vector<string>> data 中返回  由于仅返回类型和别的重载不一样，所以需要换个名字  不能直接用vector的引用，不然得初始化，还得是左值，没找到合适的方法，只能使用返回值
+vector<vector<string>>  Query1(const char * sqlstr) {
 	int status = mysql_query(&myobj, sqlstr);
-	if (status)//非0失败
-	{
-		cout << "Query failed" << endl;
-		mysql_close(&myobj);
-		return 1;
-	}
-	cout << "Query success" << endl;
-	GetStoreData(status, data);
-	return 0;//成功
+	//由于失败时无返回信息，所以也不能写成功的提示了，
+	return GetStoreData1(status);
 }
 
 //正常对返回信息处理
@@ -201,12 +194,13 @@ int GetStoreData(int status, int token) {
 }
 
 //需要返回数据库查询后的向量数据
-void GetStoreData(int status, vector<vector <string>> &data) {
+vector<vector<string>> GetStoreData1(int status) {
 	MYSQL_RES *result = NULL;
+	vector<vector<string>> data;
 	do {
 		result = mysql_store_result(&myobj);
 		if (result) {
-			process_result_set(result, data);
+			data.push_back((process_result_set1(result)));
 			mysql_free_result(result);
 		}
 		else {
@@ -226,7 +220,7 @@ void GetStoreData(int status, vector<vector <string>> &data) {
 			cout << "could not execute statement\n";
 
 	} while (status == 0);
-
+	return  data;
 }
 
 //进行导出文件的
@@ -292,7 +286,7 @@ void process_result_set(MYSQL_RES * result) {
 }
 
 //返回向量的数据处理
-void process_result_set(MYSQL_RES * result, vector<vector<string>> &data) {
+vector<string> process_result_set1(MYSQL_RES * result) {
 	int rowcount = mysql_num_rows(result);
 	vector<string> tem; // 每一个process  process_result_set 处理的是结果集中的一个表
 						//所以tem是用来获取当前这个表的数据，然后再存储到data这个结果集中
@@ -301,10 +295,6 @@ void process_result_set(MYSQL_RES * result, vector<vector<string>> &data) {
 	MYSQL_FIELD *field = NULL;
 	int fieldcount = mysql_num_fields(result);
 
-	//for (unsigned int i = 0; i < fieldcount; i++) {
-	//	field = mysql_fetch_field_direct(result, i);
-	//	//cout << setiosflags(ios::left) << setw(14) << field->name;
-	//}
 	MYSQL_ROW row = NULL;
 	row = mysql_fetch_row(result);//一行一行获取直到没有
 	while (NULL != row) {
@@ -314,7 +304,8 @@ void process_result_set(MYSQL_RES * result, vector<vector<string>> &data) {
 		cout << endl;
 		row = mysql_fetch_row(result);
 	}
-	data.push_back(tem);
+	//push_back(tem);
+	return tem;
 }
 
 //输出到文件中

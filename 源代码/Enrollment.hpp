@@ -1,4 +1,4 @@
-/*学籍管理*/
+﻿/*学籍管理*/
 #ifndef ENROLL_H_ 
 #define ENROLL_H_
 

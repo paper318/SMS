@@ -1,4 +1,4 @@
-//mysql函数定义
+﻿//mysql函数定义
 #include<iostream>
 #include<winsock.h> 
 #include<mysql.h>
@@ -33,7 +33,8 @@ int Query(const char* sqlstr, fstream *fp); //导出的查询
 void process_result_set(MYSQL_RES * result, fstream*fp);//输出文件中
 void GetStoreData(int status, fstream *fp);//输出文件						 
 
-int Query(const char * sqlstr, vector<vector<string>> &data);//将查询结果打包成向量。返回
+vector<vector<string>>  Query1(const char * sqlstr);
 
-void GetStoreData(int status, vector<vector <string>> &data);
-void process_result_set(MYSQL_RES * result, vector<vector<string>> &data);
+//需要返回数据库查询后的向量数据
+vector<vector<string>> GetStoreData1(int status);
+vector<string> process_result_set1(MYSQL_RES * result);

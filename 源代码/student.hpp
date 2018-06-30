@@ -1,4 +1,4 @@
-#ifndef class_h_
+﻿#ifndef class_h_
 #define class_h_
 #include"MyownSQL.hpp"
 #include<string>
@@ -13,6 +13,8 @@ private:
 public:
 	Student(string i, string p) :id(i), password(p) {};
 	~Student() {};
+	Student() {};
+
 	int Load();//学生登录
 			   //void SelectCourse();//选课
 			   //void DeleteCourse();//删除课

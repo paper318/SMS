@@ -1,4 +1,4 @@
-/*考务管理*/
+﻿/*考务管理*/
 #ifndef EXAM_H_
 #define EXAM_H_
  

@@ -1,14 +1,13 @@
+﻿#include"MyownSQL.hpp"
 #include"OpenClass.hpp"
-#include"MyownSQL.hpp"
-#include<vector>
-#include<fstream>
-#include<sstream>
+
+
 using namespace std;
 int stu_count;
 /*教师*/
 
 //start stop格式应该为 y-m-d h:m:s
-void OpenCourse(string tea_id,string course_id, string course_name,string start,string stop ,string tea_id,string num,string credit) {//添加课程用于选课，并设置选课时间，选课数，针对大一不能选选修课
+void OpenCourse(string tea_id,string course_id, string course_name,string start,string stop ,string num,string credit) {//添加课程用于选课，并设置选课时间，选课数，针对大一不能选选修课
 	string str = "call OpenCourse(";
 	str += quote+tea_id+quote+comma+quote+course_id+quote+comma+quote+course_name+quote+comma+quote + start + quote + comma + quote + stop + quote + comma + quote+tea_id+quote+comma+num + comma + credit + rb+semi;
 	Query(str.c_str(), "开课成功", "开课失败");
@@ -52,13 +51,13 @@ void CourseInfoQuery() {//开课目录信息查询
 }
 void SetClass(int num) {//分配班级，分配学号 应该是最开始完成，通过从文件中读取所有的信息，然后按照需求每班多少人，进行分配
 	fstream fs("student.txt");
-	string name, dep_id,dep_name, passwd = "123456";
+	string name, dep_id,dep_name, school_roll , major_status,passwd = "123456";
 	int grade, cls =1,count=0;
 	
 	while (1) {
 			
-		if (fs >> name >> grade >> dep_id>>dep_name) {
-			CreateStu(count,name,cls, grade, dep_id,dep_name, passwd);
+		if (fs >> name >> grade >> dep_id>>dep_name >> school_roll >> major_status ) {
+			CreateStu(count,name,cls, grade, dep_id,dep_name,school_roll, major_status, passwd);
 			count++;
 			if (count > num) {
 				cls += 1;
@@ -87,7 +86,7 @@ void CreateStu(int id ,string name,int cls, int grade,string dep_id,string dep_n
 	
 }
 
-void ModifyClass(string stu_id, string cls) {//分班调整，（学生更改班）
+void ModifyClass(string stu_id, string cls) //分班调整，（学生更改班）
 {	string str = "call ModifyClass(";
 	str += quote + stu_id + quote + comma + cls+  rb + semi;
 	Query(str.c_str());
@@ -107,34 +106,34 @@ void ScheduleSetByStu(string sid,string cid,string start,string stop,string day)
 	Query(str.c_str());
 }
 
-void ScheduleSetByCls(string dep, string grd, string cls, string cid, string start, string stop, string day,vector<string>&data) {//对一个班排课
-	SelectStuSameCls(dep,grd,cls,data);
-	for (auto sid : data) {//对应得到的每一个sid都插入相应的时间表
+void ScheduleSetByCls(string dep, string grd, string cls, string cid, string start, string stop, string day) {//对一个班排课
+	vector<vector<string>> data = SelectStuSameCls(dep,grd,cls);
+	for (auto sid : data[0]) {//对应得到的每一个sid都插入相应的时间表
+		string str = "call ScheduleSetByStu(";
+		str += quote + sid + quote + comma + quote + cid + quote + comma + quote + start + quote + comma + quote + stop + quote + comma + day + rb + semi;
+	Query1(str.c_str());
+	}
+}
+
+void ScheduleSetByCid(string cid, string start, string stop, string day) {//对一个班排课 cid为courseid
+	vector<vector<string>> data = SelectStuSameCid(cid);
+	for (auto sid : data[0]) {//对应得到的每一个sid都插入相应的时间表
 		string str = "call ScheduleSetByStu(";
 		str += quote + sid + quote + comma + quote + cid + quote + comma + quote + start + quote + comma + quote + stop + quote + comma + day + rb + semi;
 		Query(str.c_str());
 	}
 }
 
-void ScheduleSetByCid(string cid, string start, string stop, string day, vector<string>&data) {//对一个班排课 cid为courseid
-	SelectStuSameCid(cid, data);
-	for (auto sid : data) {//对应得到的每一个sid都插入相应的时间表
-		string str = "call ScheduleSetByStu(";
-		str += quote + sid + quote + comma + quote + cid + quote + comma + quote + start + quote + comma + quote + stop + quote + comma + day + rb + semi;
-		Query(str.c_str());
-	}
-}
 
-
-void SelectStuSameCls(string dep,string grd ,string cls,vector<string>&data ) {//选出同一个班的所有学生
+vector<vector<string>> SelectStuSameCls(string dep,string grd ,string cls ) {//选出同一个班的所有学生
 	string str = "call SelectStuSameCls(";
 	str  += quote + dep + quote + comma + quote + grd + quote + comma + quote + cls + quote + rb + semi;
-	Query(str.c_str(),data);
+	return  Query1(str.c_str());
 }
 
-void SelectStuSameCid(string cid, vector<string>&data) {//选出同一个course的所有人
+vector<vector<string>> SelectStuSameCid(string cid) {//选出同一个course的所有人
 
 	string str = "call SelectStuSameCid(";
 	str += quote + cid + quote + rb + semi;
-	Query(str.c_str(), data);
+	return Query1(str.c_str());
 }

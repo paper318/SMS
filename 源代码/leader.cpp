@@ -50,7 +50,7 @@ int Leader::LeaQueryTea(string coursename)  //按课程名查询老师相关信�
 	Query(str.c_str());
 	return 1;
 }
-void Leader::LeaQueryStu(string stu_id) //按学生学号查询学生的相关信息(班级，选课等)
+void Leader::LeaQueryStu (string stu_id) //按学生学号查询学生的相关信息(班级，选课等)
 {
 	string str = "call LeaQueryStu(";
 	str += quote + stu_id + quote + rb + semi;

@@ -1,7 +1,4 @@
-#include"SelectClass.hpp"
-#include<string>
-#include"MyownSQL.hpp"
-#include<fstream>
+﻿#include"SelectClass.hpp"
 using namespace std;
 
 /*学生 角色区分建议保留 界面好写点*/

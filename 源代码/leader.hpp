@@ -1,4 +1,4 @@
-#ifndef LEADER_H_
+﻿#ifndef LEADER_H_
 #define LEADER_H_
 
 #include<string>
@@ -8,9 +8,10 @@ class Leader {
 private:
 	 
 	string id;
-	string password;
+	string password; 
 public:
 	Leader(string a, string b) :id(a), password(b) {};
+	Leader() {};
 	~Leader() {};
 	string getdep_id();//返回该领导所在院的dep_ip，这是个为了简化LeaQueryTea()查询的辅助函数
 	int Load();//老师登录
