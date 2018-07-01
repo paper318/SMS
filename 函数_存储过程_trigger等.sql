@@ -1,4 +1,4 @@
---系
+﻿--系
 create table department
 ( name nvarchar(20), 
   dep_id nvarchar(20) primary key
@@ -560,3 +560,59 @@ msg TEXT
 			//
 			delimiter ;
 
+--学籍管理
+			--奖励
+			delimiter //
+			create procedure Award(sid nvarchar(20),t date,eve nvarchar(50))
+				begin 
+					insert into Award(stu_id,time,event)
+						values(sid,t,eve);
+				end //
+			delimiter ;
+
+			--惩罚
+			delimiter //
+			create procedure Award(sid nvarchar(20),t date,eve nvarchar(50))
+				begin 
+					insert into Punish(stu_id,time,event)
+						values(sid,t,eve);
+				end //
+			delimiter ;
+
+			-- 开除
+			delimiter //
+			create procedure Expel(sid nvarchar(20))
+				update student  set  Schoo_roll = "expel" where  stu_id = sid;
+			delimiter ;
+			--在籍			
+			delimiter //
+			create procedure StayinSchool(sid nvarchar(20))
+				update student  set  Schoo_roll = "stay" where  stu_id = sid;
+			delimiter ;
+			--休学			
+			delimiter //
+			create procedure RestatHome(sid nvarchar(20))
+				update student  set  Schoo_roll = "Rest" where  stu_id = sid;
+			delimiter ;
+			--方向改变
+			delimiter //
+			create procedure RestatHome(sid nvarchar(20),did nvarchar(20),dname navarchar(20))
+				update department  set  dep_id =did ,name = dname where  stu_id = sid;
+				update student set major_status = "changed";
+			delimiter ;
+			--毕业生登记
+			delimiter //
+			create procedure GraduateInsert(i_d nvarchar(20),n_ame nvarchar(20))
+				insert into graduate(id,name) values(i_d,n_ame)	;
+			delimiter ;
+			--毕业生打印
+			delimiter //
+			create procedure GraduateQuery()
+			select * from graduate;	
+			delimiter ;
+
+			--打印名单 太多了 ，就打印一个总的，太累了不想再写了
+			delimiter //
+			create procedure List()
+			select * from student;	
+			delimiter ;
