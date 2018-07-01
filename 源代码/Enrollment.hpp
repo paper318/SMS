@@ -10,3 +10,4 @@ void PrintStuList();//分类打印 ：总名单、年级学生名单、各班学
 void GraduaStuList();//毕业生名单以及对应的毕业证编号
 
 #endif // !ENROLL_H_
+ 

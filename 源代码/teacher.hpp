@@ -18,7 +18,7 @@ public:
 	//void QueryTeacher();
 };
 
-
+ 
 
 
 #endif // !MANAGER_H_

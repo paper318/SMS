@@ -21,6 +21,6 @@ public:
 			   //void CourseSelected();
 	void GetGrades();//查询成绩
 };
-
+ 
  
 #endif // !class_h_

@@ -6,7 +6,10 @@
 #include<vector>
 using namespace std;
 void InputGrades() //管理员sql语句录入成绩
-{	std::string str, sqlstr;
+{
+	std::string str, sqlstr;
+	cout << "管理员用sql语句录入成绩：" << endl;
+	cout << "grade(stu_id,course_id,tea_id,score)" << endl;
 	while (getline(cin, str))
 	{
 		sqlstr += str;
@@ -14,11 +17,12 @@ void InputGrades() //管理员sql语句录入成绩
 	}
 	Query(sqlstr.c_str());
 
-}
+} 
 				  
 void TeaPrintGrades() //打印老师各自所开课程的学生的成绩
-{	string filename;
-	cout << "please import the address of file which you want to save as: " << endl;
+{	
+	string filename;
+	cout << "请输入你希望保存的文件名（如：C:\\Users\\wu\\Desktop\\test.txt）: " << endl;
 	cin >> filename;
 	fstream file(filename);
 	if (!file.is_open()) {
@@ -32,7 +36,7 @@ void TeaPrintGrades() //打印老师各自所开课程的学生的成绩
 void StuPrintGrades() //按学号打印学生所有课程成绩
 {
 	string filename;
-	cout << "please import the address of file which you want to save as: " << endl;
+	cout << "请输入你希望保存的文件名（如：C:\\Users\\wu\\Desktop\\test.txt）: " << endl;
 	cin >> filename;
 	fstream file(filename);
 	if (!file.is_open()) {
@@ -45,7 +49,7 @@ void StuPrintGrades() //按学号打印学生所有课程成绩
 
 void DepGradesSort()//按学院，总分排名并且打印学生课程成绩
 {	string filename;
-	cout << "please import the address of file which you want to save as: " << endl;
+	cout << "请输入你希望保存的文件名（如：C:\\Users\\wu\\Desktop\\test.txt）: " << endl;
 	cin >> filename;
 	fstream file(filename);
 	if (!file.is_open()) {
@@ -63,7 +67,7 @@ void DepGradesSort()//按学院，总分排名并且打印学生课程成绩
 void GradesDistri()   //按学院，学位课计算分数段
 {
 	string filename;
-	cout << "please import the address of file which you want to save as: " << endl;
+	cout << "请输入你希望保存的文件名（如：C:\\Users\\wu\\Desktop\\test.txt）: " << endl;
 	cin >> filename;
 	fstream file(filename);
 	if (!file.is_open()) {

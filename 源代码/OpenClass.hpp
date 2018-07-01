@@ -6,7 +6,7 @@
 #include<fstream>
 #include<sstream>
 
-
+ 
  /*教师*/
 void OpenCourse(string tea_id,string course_id, string course_name, string start, string stop, string num, string credit);
 //添加课程用于选课，并设置选课时间，选课数，针对大一不能选选修课

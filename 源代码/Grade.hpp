@@ -9,4 +9,4 @@ void StuPrintGrades(); //按学号打印学生所有课程成绩
 void DepGradesSort();// 按学院，总分排名并且打印学生课程成绩
 void GradesDistri();// 按学院，学位课计算分数段
 
-#endif
+#endif 

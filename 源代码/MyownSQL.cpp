@@ -35,7 +35,7 @@ void InitDB() {
 	//mysql_free_result(result);
 
 }
-
+ 
 //关闭
 void closeDB() {
 	mysql_close(&myobj);

@@ -11,7 +11,7 @@ int Manager::Load()
 }
 
 
-
+ 
 
 /*更改账户*/
 void  Manager::ChangePassword() //管理员用sql语句update用户账户密码

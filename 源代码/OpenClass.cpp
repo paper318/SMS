@@ -1,7 +1,7 @@
 ﻿#include"MyownSQL.hpp"
 #include"OpenClass.hpp"
 
-
+ 
 using namespace std;
 int stu_count;
 /*教师*/
