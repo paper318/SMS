@@ -1,4 +1,4 @@
-﻿--系
+--系
 create table department
 ( name nvarchar(20), 
   dep_id nvarchar(20) primary key
@@ -15,7 +15,7 @@ create table department
 -- 学生
 create table student(
 dep_id nvarchar(20),-- 系
-class_id int,
+class_id nvarchar(20),
 stuGrade int,
 name nvarchar(20),
 stu_id nvarchar(20) not null primary key ,
@@ -33,9 +33,9 @@ dep_id nvarchar(20)
 );
 -- 领导
 create table leader(
-lea_id nvarchar(20) not null primary key,
-name nvarchar(20),
 dep_id nvarchar(20),
+name nvarchar(20),
+lea_id nvarchar(20) not null primary key,
 passwd nvarchar(20)
 );
 -- 管理员
@@ -68,10 +68,12 @@ primary key(stu_id,course_id,tea_id)
 -- 成绩
 create table grade(
 stu_id nvarchar(20) not null,
-course_name nvarchar(20) not null,
+course_id nvarchar(20) not null,
+tea_id nvarchar(20) not null,
 score numeric(10.2),
-primary key(stu_id,course_name)
+primary key(stu_id,course_id,tea_id)
 );
+
 -- 教材
 create table book(
 book_id nvarchar(20) not null primary key,
@@ -82,22 +84,22 @@ num int
 create table schedule  -- 可以根据班级统一排课(根据stu_id找到班级，同一个的排一个课)，也可以根据学生排课(根据stu_id单独设置)，也可以根据课程排课(选择有这个课的所有学生，进行加课)
 (stu_id nvarchar(20),
 name nvarchar(20),
+class_id nvarchar(20),
 time_start datetime,
 time_stop datetime,
-tea_id nvarchar(20),
-class_time int
+tea_id nvarchar(20)
 );
 -- 奖励
 create table award(
+stu_id nvarchar(20),
 time date,
-event nvarchar(50),
-award nvarchar(30)
+event nvarchar(50)
 );
 -- 惩罚
 create table punish(
+stu_id nvarchar(20),
 time date,
-event nvarchar(50),
-award nvarchar(30)
+event nvarchar(50)
 );
 -- 毕业
 create table graduate(
@@ -110,13 +112,14 @@ name nvarchar(20)
 
 -- 考试
 create table test(
-room_id nvarchar(20) not null primary key, 
+room_id nvarchar(20), 
 limit_num numeric(10.2),
 course_name  nvarchar(20),
 class_id     nvarchar(20),
 Tea_id    nvarchar(20),
 time_start datetime,  
-time_stop datetime
+time_stop datetime,
+primary key(room_id,time_start)
 );
 
 
@@ -560,8 +563,9 @@ msg TEXT
 			//
 			delimiter ;
 
+
 --学籍管理
-			--奖励
+			-- 奖励
 			delimiter //
 			create procedure Award(sid nvarchar(20),t date,eve nvarchar(50))
 				begin 
@@ -570,7 +574,7 @@ msg TEXT
 				end //
 			delimiter ;
 
-			--惩罚
+			-- 惩罚
 			delimiter //
 			create procedure Award(sid nvarchar(20),t date,eve nvarchar(50))
 				begin 
@@ -584,34 +588,34 @@ msg TEXT
 			create procedure Expel(sid nvarchar(20))
 				update student  set  Schoo_roll = "expel" where  stu_id = sid;
 			delimiter ;
-			--在籍			
+			-- 在籍			
 			delimiter //
 			create procedure StayinSchool(sid nvarchar(20))
 				update student  set  Schoo_roll = "stay" where  stu_id = sid;
 			delimiter ;
-			--休学			
+			-- 休学			
 			delimiter //
 			create procedure RestatHome(sid nvarchar(20))
 				update student  set  Schoo_roll = "Rest" where  stu_id = sid;
 			delimiter ;
-			--方向改变
+			-- 方向改变
 			delimiter //
 			create procedure RestatHome(sid nvarchar(20),did nvarchar(20),dname navarchar(20))
 				update department  set  dep_id =did ,name = dname where  stu_id = sid;
 				update student set major_status = "changed";
 			delimiter ;
-			--毕业生登记
+			-- 毕业生登记
 			delimiter //
 			create procedure GraduateInsert(i_d nvarchar(20),n_ame nvarchar(20))
 				insert into graduate(id,name) values(i_d,n_ame)	;
 			delimiter ;
-			--毕业生打印
+			-- 毕业生打印
 			delimiter //
 			create procedure GraduateQuery()
 			select * from graduate;	
 			delimiter ;
 
-			--打印名单 太多了 ，就打印一个总的，太累了不想再写了
+			-- 打印名单 太多了 ，就打印一个总的，太累了不想再写了
 			delimiter //
 			create procedure List()
 			select * from student;	
