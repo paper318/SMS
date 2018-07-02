@@ -197,28 +197,55 @@ void Menu() {
 
 void ViewEnroll() {
 	cout << "__________________________________________________________________" << endl;
-	cout << "|" << "1.奖励登记 2.惩罚登记 3.学籍变动 4.更改院系  5.打印学生表    \t|" << endl;
-	cout << "|" << " 6.毕业生登记 7.毕业生打印 8.返回上一级		\t|" << endl;
+	cout << "|" << "1.奖惩管理  2.学籍变动 3.更改院系  4.打印学生表    \t|" << endl;
+	cout << "|" << " 5.毕业生登记 6.毕业生打印 7.返回上一级		\t|" << endl;
 	cout << "___________________________________________________________________" << endl;
 	int opt;
 	while (cin >> opt) {
 		switch (opt) {
 		case 1: {
-			string sid, time, event;
-			cout << "学生学号："; cin >> sid;
-			cout << "\n奖励时间:"; cin >> time;
-			cout << "\n事件信息和奖品:"; cin >> event;
-			Award(sid ,time ,event);
-			break;
+			cout << "_________________________________________________________________" << endl;
+			cout << "|" << "1.奖励登记 2.奖励查询 3.惩罚登记 4.惩罚查询  5.返回上一级	\t|" << endl;
+			cout << "__________________________________________________________________" << endl;
+			int opt1;
+			while (cin >> opt1) {
+				switch (opt1) {
+				case 1: {
+					string sid, time, event;
+					cout << "学生学号："; cin >> sid;
+					cout << "\n奖励时间:"; cin >> time;
+					cout << "\n事件信息和奖品:"; cin >> event;
+					WriteAward(sid, time, event);
+					break;
+				}
+				case 2: {
+					PrintAward();
+					break;
+				}
+				case 3: {
+					string sid, time, event;
+					cout << "学生学号："; cin >> sid;
+					cout << "\n惩罚时间:"; cin >> time;
+					cout << "\n事件信息和惩罚:"; cin >> event;
+					WritePunish(sid, time, event);
+					break;
+				}
+				case 4: {
+					PrintPunish();
+					break;
+				}
+				case 5:break;
+				default:
+					cout << "输入选项有误，请重新输入:";
+				}
+				if (opt == 4)	break;//返回登录
+									  /*循环输入*/
+				cout << "_________________________________________________________________" << endl;
+				cout << "|" << "1.奖励登记 2.奖励查询 3.惩罚登记 4.惩罚查询  5.返回上一级	\t|" << endl;
+				cout << "__________________________________________________________________" << endl;
+			}
 		}
-		case 2: {
-			string sid, time, event;
-			cout << "学生学号："; cin >> sid;
-			cout << "\n惩罚时间:"; cin >> time;
-			cout << "\n事件信息和惩罚:"; cin >> event;
-			Punish(sid, time, event);
-			break;
-		}
+
 		case 3: {
 			cout << "_________________________________________________________________" << endl;
 			cout << "|" << "1.保留学籍 2.开除学籍 3.休学	4.返回上一级					\t|" << endl;

@@ -1,4 +1,4 @@
---系
+﻿--系
 create table department
 ( name nvarchar(20), 
   dep_id nvarchar(20) primary key
@@ -567,20 +567,31 @@ msg TEXT
 --学籍管理
 			-- 奖励
 			delimiter //
-			create procedure Award(sid nvarchar(20),t date,eve nvarchar(50))
+			create procedure WriteAward(sid nvarchar(20),t date,eve nvarchar(50))
 				begin 
 					insert into Award(stu_id,time,event)
 						values(sid,t,eve);
 				end //
 			delimiter ;
 
+			delimiter //
+			create procedure PrintAward()
+				begin 
+					select * from Award; 
+				end //
+			delimiter ;
+
 			-- 惩罚
 			delimiter //
-			create procedure Award(sid nvarchar(20),t date,eve nvarchar(50))
+			create procedure WritePunish(sid nvarchar(20),t date,eve nvarchar(50))
 				begin 
 					insert into Punish(stu_id,time,event)
 						values(sid,t,eve);
 				end //
+			delimiter ;
+						delimiter //
+			create procedure PrintPunish()
+				select * from Punish;
 			delimiter ;
 
 			-- 开除

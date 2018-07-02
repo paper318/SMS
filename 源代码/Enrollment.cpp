@@ -5,15 +5,23 @@
 using namespace std;
 
 
-void Award(string sid,string time,string event) {//奖信息
-	string str = "call Award(";
+void WriteAward(string sid,string time,string event) {//奖信息
+	string str = "call WriteAward(";
 	str += quote + sid + quote + comma + quote + time + quote +comma+quote+event+quote+ rb + semi;
 	Query(str.c_str(), "奖励记录成功", "查询记录失败");
 }
-void Punish(string sid, string time, string event) {//惩罚
-	string str = "call Award(";
+void WritePunish(string sid, string time, string event) {//惩罚
+	string str = "call WritePunish(";
 	str += quote + sid + quote + comma + quote + time + quote + comma + quote + event + quote + rb + semi;
 	Query(str.c_str(), "惩罚记录成功", "惩罚记录失败");
+}
+void PrintAward() {//奖信息
+	string str = "call PrintAward()";
+	Query(str.c_str(), "奖励查询成功", "查询查询失败");
+}
+void PrintPunish() {//惩罚
+	string str = "call PrintPunish()";
+	Query(str.c_str(), "惩罚查询成功", "惩罚查询失败");
 }
 void Expel(string sid) {//改变学籍，是否在籍
 	string str = "call Expel(";

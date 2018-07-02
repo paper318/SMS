@@ -3,8 +3,11 @@
 #define ENROLL_H_
 
 /*学籍维护*/
-void Award(string sid, string time, string event);//奖信息
-void Punish(string sid, string time, string event);//惩罚
+void WriteAward(string sid, string time, string event);//奖信息
+void WritePunish(string sid, string time, string event);//惩罚
+void PrintAward();//奖信息
+void PrintPunish();//惩罚
+
 void Expel(string sid);//改变学籍，是否在籍
 void StayinSchool(string sid);
 void RestatHome(string sid);
