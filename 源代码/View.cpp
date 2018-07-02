@@ -1,6 +1,6 @@
 ﻿#include"view.hpp"
 using namespace std;
-enum token_type { TEA, STU, MAN, LED };
+enum token_type { TEA=1, STU, MAN, LED };
 int token;
 //没办法如果不全局，函数就要重载了。。
 Teacher tea_obj =  Teacher(); //无参构造函数不能 Teacher tea_obj();实例化
@@ -22,7 +22,7 @@ void login() {
 		else break;
 	}
 	while (1) {  
-		system("cls");
+		//system("cls");
 		cout << "输入您的账号：";
 		cin >> id;
 		cout << "\n输入您的密码： ";
@@ -393,6 +393,7 @@ void ViewOpen() {
 				cout << "学生编号:"; cin >> id;
 				cout << "\n 学生姓名:"; cin >> name;
 				cout << "\n 班级:"; cin >> cls;
+				cout << "\n年级";cin >> grade;
 				cout << "\n 系编号:"; cin >> dep_id;
 				cout << "\n 系名:"; cin >> dep_name;
 				cout << "\n 学籍:"; cin >> school_roll;

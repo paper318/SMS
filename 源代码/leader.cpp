@@ -16,9 +16,9 @@ string Leader::getdep_id()
 	string str = "call getdep_id(";
 	str += quote + id + quote + rb + semi;
 	vector<vector<string>> data; 
-	if (!Query(str.c_str(), data))
-		return data[0][0]; 
-	else return "faild";
+	data = Query1(str.c_str());
+	return data[0][0]; 
+
 }
 
 void Leader::StudentCount() //查询本院学生人数
@@ -37,8 +37,11 @@ void Leader::LeaCourseStat() //查询本院的开课统计(开了哪些课，每
 }
 
 
-int Leader::LeaQueryTea(string coursename)  //按课程名查询老师相关信息
-{	
+int Leader::LeaQueryTea()  //按课程名查询老师相关信息
+{
+	string coursename;
+	cout << "请输入需要查询的课程名:" << endl;
+	cin >> coursename;
 	string dep_id = this->getdep_id(); //成功则返回dep_id,否则返回string "faild"
 	string s = "faild";
 	if (dep_id == s) {
@@ -50,8 +53,11 @@ int Leader::LeaQueryTea(string coursename)  //按课程名查询老师相关信�
 	Query(str.c_str());
 	return 1;
 }
-void Leader::LeaQueryStu (string stu_id) //按学生学号查询学生的相关信息(班级，选课等)
+void Leader::LeaQueryStu () //按学生学号查询学生的相关信息(班级，选课等)
 {
+	string stu_id;
+	cout << "请输入需要查询的学生学号:" << endl;
+	cin >> stu_id;
 	string str = "call LeaQueryStu(";
 	str += quote + stu_id + quote + rb + semi;
 	Query(str.c_str());
