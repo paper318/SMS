@@ -1,4 +1,4 @@
-#include"Grade.hpp"
+﻿#include"Grade.hpp"
 #include"MyownSQL.hpp"
 #include<string>
 #include<iostream>
@@ -14,9 +14,9 @@ void InputGrades() //管理员sql语句录入成绩
 	{
 		sqlstr += str;
 		str.clear();
-	}
+	}  
 	Query(sqlstr.c_str());
-
+	 
 } 
 				  
 void TeaPrintGrades() //打印老师各自所开课程的学生的成绩
@@ -31,6 +31,8 @@ void TeaPrintGrades() //打印老师各自所开课程的学生的成绩
 	}
 	string str = "call TeaPrintGrades();";
 	Query(str.c_str(), &file);
+	file.close();
+
 }
 
 void StuPrintGrades() //按学号打印学生所有课程成绩
@@ -45,6 +47,7 @@ void StuPrintGrades() //按学号打印学生所有课程成绩
 	}
 	string str = "call StuPrintGrades();";
 	Query(str.c_str(), &file);
+	file.close();
 }
 
 void DepGradesSort()//按学院，总分排名并且打印学生课程成绩
@@ -58,6 +61,7 @@ void DepGradesSort()//按学院，总分排名并且打印学生课程成绩
 	}
 	string str = "call DepGradesSort();";
 	Query(str.c_str(), &file);
+	file.close();
 }
 
 

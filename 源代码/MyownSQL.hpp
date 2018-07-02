@@ -12,7 +12,7 @@
 #include<fstream>
 #include<vector>
 using namespace std; 
-extern MYSQL myobj;
+
 extern string comma, plus, quote, space, lb, rb, semi, colon, hyphen;
 void UseDB(const char * sqlstr);//使用表1
 void InitDB();//初始化数据库1

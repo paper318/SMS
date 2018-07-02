@@ -13,7 +13,7 @@ public:
 	int Load();
 
 	/*更改账户*/
-	void ChangePassword(); //管理员用sql语句update用户账户密码
+	void ChangeOnePassword(); //管理员用sql语句update用户账户密码
 
 
 };

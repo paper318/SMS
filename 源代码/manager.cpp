@@ -14,14 +14,14 @@ int Manager::Load()
  
 
 /*更改账户*/
-void  Manager::ChangePassword() //管理员用sql语句update用户账户密码
+void  Manager::ChangeOnePassword() //管理员用sql语句update用户账户密码
 {
-	std::string str, sqlstr;
-	while (getline(cin, str))
-	{
-		sqlstr += str;
-		str.clear();
-	}
-	Query(sqlstr.c_str());
-
+	std::string id,newpasswd, str;
+	cout << "请输入需要更改的账户名：";
+	cin >> id;
+	cout << "请输入新密码：";
+	cin >> newpasswd;
+	str = "call ChangeOnePassword(";
+	str += quote + id + quote + comma + quote + newpasswd + quote + rb + semi;
+	Query(str.c_str());
 }
