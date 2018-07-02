@@ -8,7 +8,7 @@ using namespace std;
 void InputGrades() //管理员sql语句录入成绩
 {
 	std::string str, sqlstr;
-	cout << "管理员用sql语句录入成绩：" << endl;
+	cout << "管理员用sql语句录入成绩:" << endl;
 	cout << "grade(stu_id,course_id,tea_id,score)" << endl;
 	while (getline(cin, str))
 	{

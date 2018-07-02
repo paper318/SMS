@@ -16,6 +16,7 @@ extern MYSQL myobj;
 extern string comma, plus, quote, space, lb, rb, semi, colon, hyphen;
 void UseDB(const char * sqlstr);//使用表1
 void InitDB();//初始化数据库1
+void closeDB();
 
 			  //查询方法的重载				
 int Query(const char * sqlstr);//将结果集中的所有表打印输出到屏幕

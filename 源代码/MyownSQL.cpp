@@ -1,7 +1,7 @@
 #include"MyownSQL.hpp"
 #include<vector>
 #include<iostream>
-extern MYSQL myobj;
+MYSQL myobj;
 extern string comma = ",", plus = "+", quote = "\"", space = " ", lb = "(", rb = ")", semi = ";", colon = ":", hyphen = "-";
 
 
@@ -18,7 +18,7 @@ void InitDB() {
 	mysql_options(&myobj, MYSQL_SET_CHARSET_NAME, "gbk");
 	//连接数据库
 	//if(NULL!= mysql_databse)
-	if (NULL != mysql_real_connect(&myobj, "localhost", "root", "zhanxinrui", "test", 3306, NULL, CLIENT_MULTI_STATEMENTS))
+	if (NULL != mysql_real_connect(&myobj, "localhost", "root", "123456", "sms", 3306, NULL, CLIENT_MULTI_STATEMENTS))
 		//这里的地址，用户名，密码，端口可以根据自己本地的情况更改  
 	{
 		cout << "mysql_real_connect() succeed" << endl;

@@ -1,9 +1,12 @@
-#include"View.hpp"
-
+ï»¿#include"View.hpp"
 int main() {
-	cout << "Ñ§Ôº¹ÜÀíÏµÍ³ " << endl;
-	cout << "\n\n\n\n\n\t\t\t\tpowered by ¡£¡£¡£ " << endl;
-	cout << "\t\t\t\t»Ø³µ½øÈë" << endl;
+	/*cout << "å­¦é™¢ç®¡ç†ç³»ç»Ÿ" << endl;
+
+	cout << "\n\n\n\n\n\t\t\t\tpowered by ã€‚ã€‚ã€‚ " << endl;
+	cout << "\t\t\t\tå›žè½¦è¿›å…¥" << endl;*/
+	cout << "å­¦é™¢ç®¡ç†ç³»ç»Ÿ\n\n\n\n" << endl;
+	InitDB();
 	login();
+	closeDB();
 	return 0;
 }
