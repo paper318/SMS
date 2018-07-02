@@ -15,7 +15,6 @@ void Teacher::TeaQueryStu()//查询所有学生情况（选了这门课的学生
 {
 	string str = "call TeaQueryStu(";
 	str += quote + id + quote + rb+semi;
-	cout << str << endl;
 	Query(str.c_str());
 }
  

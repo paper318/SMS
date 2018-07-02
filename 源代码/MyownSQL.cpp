@@ -30,7 +30,7 @@ void InitDB() {
 	}
 	//mysql_query(&myobj, "set names utf8");
 	//使用或创建数据库
-	UseDB("studb");
+	//UseDB("studb");
 
 	//mysql_free_result(result);
 
@@ -278,11 +278,14 @@ void process_result_set(MYSQL_RES * result) {
 	row = mysql_fetch_row(result);//一行一行获取直到没有
 	while (NULL != row) {
 		for (int i = 0; i < fieldcount; i++) {
-			cout << setiosflags(ios::left) << setw(14) << row[i];
+			if (!row[i])cout << setiosflags(ios::left) << setw(14) << "NULL";
+			else cout << setiosflags(ios::left) << setw(14) << row[i];
 		}
 		cout << endl;
 		row = mysql_fetch_row(result);
 	}
+	for (int i = 0; i < fieldcount; i++)
+		cout << "_______________";cout << endl;
 }
 
 //返回向量的数据处理
@@ -299,7 +302,8 @@ vector<string> process_result_set1(MYSQL_RES * result) {
 	row = mysql_fetch_row(result);//一行一行获取直到没有
 	while (NULL != row) {
 		for (int i = 0; i < fieldcount; i++) {
-			tem.push_back(row[i]);
+			if (!row[i])tem.push_back("NULL");
+			else tem.push_back(row[i]);
 		}
 		cout << endl;
 		row = mysql_fetch_row(result);
@@ -334,7 +338,8 @@ void process_result_set(MYSQL_RES * result, fstream*fp) {
 	row = mysql_fetch_row(result);//一行一行获取直到没有
 	while (NULL != row) {
 		for (int i = 0; i < fieldcount; i++) {
-			*fp << setiosflags(ios::left) << setw(14) << row[i];
+			if(!row[i])*fp << setiosflags(ios::left) << setw(14) << "NULL";
+			else *fp << setiosflags(ios::left) << setw(14) << row[i];
 		}
 		*fp << endl;
 		row = mysql_fetch_row(result);

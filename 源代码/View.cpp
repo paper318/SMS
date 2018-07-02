@@ -11,13 +11,13 @@ Leader led_obj = Leader();
 //登陆
 void login() {
 	cout << "                     登录                 " << endl;
-	cout << "______________________________________" << endl;
+	cout << "_______________________________________" << endl;
 	cout << "|" << "1.教师 2.学生 3.管理员 4.领导 \t|" << endl;
-	cout << "——————————————————————————————————————" << endl;
+	cout << "_______________________________________" << endl;
 	string id, pwd;
 
 	while (cin >> token) {
-		if (token < 0 || token > 3)
+		if (token < 0 || token > 4)
 			cout << "输入有误，请重新输入:";
 		else break;
 	}
@@ -67,9 +67,9 @@ void login() {
 			exit(0);
 			//下一循环的显示
 			cout << "                     登录                 " << endl;
-			cout << "______________________________________" << endl;
+			cout << "_______________________________________" << endl;
 			cout << "|" << "1.教师 2.学生 3.管理员 4.领导 \t|" << endl;
-			cout << "——————————————————————————————————————" << endl;
+			cout << "_______________________________________" << endl;
 		}
 	}
 
@@ -99,11 +99,13 @@ void Menu() {
 				cout << "输入选项有误，请重新输入:";
 			}
 			if (opt == 4)	break;//返回登录
+			system("cls");
 			cout << "                             菜单                                  " << endl;
 			cout << "______________________________________________" << endl;
 			cout << "|" << "1.开课管理 2.选课管理 3.其他 4.退出登录\t|" << endl;
 			cout << "______________________________________________" << endl;
 		}
+		exit(0);
 	}
 	case STU: {
 		cout << "                             菜单                                  " << endl;
@@ -143,7 +145,9 @@ void Menu() {
 			cout << "_________________________" << endl;
 			cout << "|" << "1.其他 2.退出登录\t|" << endl;
 			cout << "__________________________" << endl;
+
 		}
+		exit(0);
 	}
 	case MAN: {
 		cout << "                             菜单                                  " << endl;
@@ -152,6 +156,7 @@ void Menu() {
 		cout << "_____________________________________________________________________________" << endl;
 		int opt;
 		while (cin >> opt) {
+			system("cls");
 			switch (opt) {
 			case 1:ViewEnroll(); break;
 			case 2:ViewOpen(); break;
@@ -169,6 +174,7 @@ void Menu() {
 			cout << "|" << "1.学籍管理 2.开课管理 3.选课管理 4.考试管理 5.成绩管理 6.其他 7.退出登录\t|" << endl;
 			cout << "_____________________________________________________________________________" << endl;
 		}
+		exit(0);
 	}
 	default:
 		cout << "未知错误";
@@ -611,14 +617,14 @@ void ViewGra() {
 	else if (token == MAN) {
 
 
-
 		cout << "_______________________________________________________________________" << endl;
-		cout << "|" << "1.录入成绩 2.打印老师课程成绩 3.给打印学生课程成绩           \t|" << endl;
-		cout << "|" << "4.打印总分排名成绩 5.打印课程成绩分数段人数					 \t|" << endl;
-		cout << "|" << "6.返回上一级											     \t|" << endl;
+		cout << "|   1.录入成绩    2.打印老师课程成绩    3.给打印学生课程成绩          |" << endl;
+		cout << "|   4.打印总分排名成绩       5.打印课程成绩分数段人数			       |" << endl;
+		cout << "|   6.返回上一级											           |" << endl;
 		cout << "_______________________________________________________________________" << endl;
 		int opt;
 		while (cin >> opt) {
+			system("cls");
 			switch (opt) {
 				 case 1:InputGrades(); break;		
 				 case 2:TeaPrintGrades();break;
@@ -630,6 +636,12 @@ void ViewGra() {
 				cout << "输入选项有误，请重新输入:";
 			}
 			if (opt == 6)	break;//返回登录
+
+			cout << "_______________________________________________________________________" << endl;
+			cout << "|   1.录入成绩    2.打印老师课程成绩    3.给打印学生课程成绩          |" << endl;
+			cout << "|   4.打印总分排名成绩       5.打印课程成绩分数段人数			       |" << endl;
+			cout << "|   6.返回上一级											           |" << endl;
+			cout << "_______________________________________________________________________" << endl;
 		}
 	}
 
@@ -662,6 +674,7 @@ void ViewOthers() {
 		cout << "_______________________________________________________________________" << endl;
 		int opt;
 		while (cin >> opt) {
+			system("cls");
 			switch (opt) {
 				case 1:led_obj.StudentCount(); break;		
 				case 2:led_obj.LeaCourseStat();break;
@@ -671,7 +684,7 @@ void ViewOthers() {
 			default:
 				cout << "输入选项有误，请重新输入:";
 			}
-			if (opt == 4)	break;//返回登录
+			if (opt == 5)	break;//返回登录
 			cout << "_______________________________________________________________________" << endl;
 			cout << "|" << "1.查询本院学生总数   2.查询本院开课统计 3.按课程名查询老师   \t|" << endl;
 			cout << "|" << "4.查询某个学生的信息   5.返回上一级                          \t|" << endl;
@@ -685,9 +698,9 @@ void ViewOthers() {
 		int opt;
 		while (cin >> opt) {
 
-
+			system("cls");
 			switch (opt) {
-				case 1:man_obj.ChangePassword();break;
+				case 1:man_obj.ChangeOnePassword();break;
 				case 2:break;
 			default:
 				cout << "输入选项有误，请重新输入:";
