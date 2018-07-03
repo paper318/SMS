@@ -18,8 +18,8 @@ void InitDB() {
 	mysql_options(&myobj, MYSQL_SET_CHARSET_NAME, "gbk");
 	//连接数据库
 	//if(NULL!= mysql_databse)
-	if (NULL != mysql_real_connect(&myobj, "localhost", "root", "123456", "sms", 3306, NULL, CLIENT_MULTI_STATEMENTS))
-		//这里的地址，用户名，密码，端口可以根据自己本地的情况更改  
+	//本地//if (NULL != mysql_real_connect(&myobj, "localhost", "root", "123456", "sms", 3306, NULL, CLIENT_MULTI_STATEMENTS))
+	if (NULL != mysql_real_connect(&myobj, "60.205.223.213", "DB199", "DB199", "sms", 3306, NULL, CLIENT_MULTI_STATEMENTS))//第一个是用户名第二个是密码
 	{
 		cout << "mysql_real_connect() succeed" << endl;
 	}
@@ -79,6 +79,7 @@ int Query(const char* sqlstr, fstream* fp) {
 	if (status)//非0失败
 	{
 		cout << "Query failed" << endl;
+		cout << mysql_error(&myobj) << endl;
 		mysql_close(&myobj);
 		return 1;
 	}
@@ -94,6 +95,7 @@ int Query(const char * sqlstr, char* success, char* failed) {
 	if (status>0)
 	{
 		cout << failed << endl;
+		cout << mysql_error(&myobj) << endl;
 		mysql_close(&myobj);
 		return 1;
 	}
@@ -111,6 +113,7 @@ int Query(const char * sqlstr, int token) {  // 这个token参数唯一作用就
 	if (status)//非0失败
 	{
 		cout << "Query failed" << endl;
+		cout << mysql_error(&myobj) << endl;
 		mysql_close(&myobj);
 		return 1;
 	}

@@ -51,11 +51,14 @@ void PrintStuList() {//分类打印 ：总名单、年级学生名单、各班学生名单、学号段内学
 }
 
 void GraduaStuList(string id ,string name) {//毕业生名单以及对应的毕业证编号
-	string str = "call GraduateInsert()";
+	string str = "call GraduateInsert(";
 	str += quote + id + quote + comma+quote+name+quote+rb + semi;
+//	cout << str;
+
 	Query(str.c_str(), "查询成功", "查询失败");
 }
 void GraduaStuListQ() {//毕业生名单以及对应的毕业证编号
 	string str = "call GraduateQuery()";
+	//cout << str;
 	Query(str.c_str(), "查询成功", "查询失败");
 }

@@ -10,7 +10,7 @@ public:
 	Teacher(string a, string b) :id(a), password(b) {};
 	Teacher() {};
 	~Teacher() {};
-
+	string get_id() { return id; }
 	int Load();//老师登录
 	void TeaQueryStu(); //查询所有学生情况（选了这门课的学生们的一些信息，如学号，姓名，班级，成绩）
 	void TeaCourseStat();//开课统计，(开了哪些课，每个选课人数)

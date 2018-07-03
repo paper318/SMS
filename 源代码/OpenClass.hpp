@@ -8,7 +8,7 @@
 
  
  /*教师*/
-void OpenCourse(string tea_id,string course_id, string course_name, string start, string stop, string num, string credit);
+void OpenCourse(string tea_id,string course_id, string course_name, string start, string stop, string num, string credit,string type);
 //添加课程用于选课，并设置选课时间，选课数，针对大一不能选选修课
 void CreateProject(string course_id, string tea_id, string text);// 教学计划信息查询处理和发布？？？
 void SelectProject(string course_id, string tea_id);
@@ -28,7 +28,7 @@ void CourseInfoQuery();
 void SetClass(int num);
 //分配班级，分配学号 应该是最开始完成，通过从文件中读取所有的信息，然后按照需求每班多少人，进行分配
 
-void CreateStu(int id, string name, int cls, int grade, string dep_id, string dep_name, string school_roll, string major_status, string passwd);//新建一个学生 ,也可用于单独新建一个学生
+void CreateStu(int id, string name, string cls, int grade, string dep_id, string dep_name, string school_roll, string major_status, string passwd);//新建一个学生 ,也可用于单独新建一个学生
 
 //新建一个学生
 void ModifyClass(string stu_id, string cls);
@@ -36,10 +36,11 @@ void ModifyClass(string stu_id, string cls);
 void GetClass(); //分班的情况 （各班人 ，姓名）
 
 //排课程表
-void ScheduleSetByStu(string sid, string cid, string start, string stop, string day);//对特定学号排课
+void ScheduleSetByStu(string sid,string cname, string cid, string start, string stop, string tea_id);//对特定学号排课
+//(stu_id,name,class_id,time_start,time_stop,tea_id)
 
-void ScheduleSetByCls(string dep, string grd, string cls, string cid, string start, string stop, string day);//对一个班排课
-void ScheduleSetByCid(string cid, string start, string stop, string day);//对一个班排课 cid为courseid
+void ScheduleSetByCls(string dep, string grd, string cls, string cnmae, string cid,string start, string stop, string tea_id);//对一个班排课
+void ScheduleSetByCid(string cname,string cid, string start, string stop, string tea_id);//对一个班排课 cid为courseid
 vector<vector<string>> SelectStuSameCls(string dep, string grd, string cls); //选出同一个班的所有学生
 vector<vector<string>> SelectStuSameCid(string cid);//选出同一个course的所有人
 

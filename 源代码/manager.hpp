@@ -11,7 +11,7 @@ public:
 	Manager() {};
 	~Manager() {};
 	int Load();
-
+	string get_id() { return id; }
 	/*更改账户*/
 	void ChangeOnePassword(); //管理员用sql语句update用户账户密码
 

@@ -1,8 +1,10 @@
-﻿/*学籍管理*/
+﻿
+/*学籍管理*/
 #ifndef ENROLL_H_ 
 #define ENROLL_H_
 #include<string>
 using namespace std;
+
 /*学籍维护*/
 void WriteAward(string sid, string time, string event);//奖信息
 void WritePunish(string sid, string time, string event);//惩罚

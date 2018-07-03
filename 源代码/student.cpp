@@ -1,22 +1,19 @@
 #include"student.hpp"
-extern int open_time;//å¼€è¯¾æ—¶é—´
-extern int close_time;//åœæ­¢é€‰è¯¾æ—¶é—´
+extern int open_time;//¿ª¿ÎÊ±¼ä
+extern int close_time;//Í£Ö¹Ñ¡¿ÎÊ±¼ä
 
-int  Student::Load() {//å­¦ç”Ÿç™»å½•
-//è¿”å›2ï¼šç™»å½•æˆåŠŸï¼Œè¿”å›-1ï¼šè´¦å·å¯†ç é”™è¯¯ï¼Œè¿”å›0ï¼šç¨‹åºè¿è¡Œé”™è¯¯
+int  Student::Load() {//Ñ§ÉúµÇÂ¼
+					  //·µ»Ø2£ºµÇÂ¼³É¹¦£¬·µ»Ø-1£ºÕËºÅÃÜÂë´íÎó£¬·µ»Ø0£º³ÌĞòÔËĞĞ´íÎó
 	string str = "select PasswdStu( ";
-	str += quote+id+quote+comma+quote+password+quote+rb+semi;
-	int token = Query(str.c_str(),int(2));
-	//int(2ï¼‰å”¯ä¸€çš„ä½œç”¨æ˜¯æä¾›ä¸€ä¸ªintå‹å‚æ•°åŒºåˆ«é‡è½½ç‰ˆæœ¬
+	str += quote + id + quote + comma + quote + password + quote + rb + semi;
+	int token = Query(str.c_str(), int(2));
+	//int(2£©Î¨Ò»µÄ×÷ÓÃÊÇÌá¹©Ò»¸öintĞÍ²ÎÊıÇø±ğÖØÔØ°æ±¾
 	return token;
 }
-	 
-void Student::GetGrades() {//æŸ¥è¯¢å­¦ç”Ÿæˆç»©
-	string str = "select GetGrades(";
+
+void Student::GetGrades() {//²éÑ¯Ñ§Éú³É¼¨
+	string str = "call GetGrades(";
 	str += quote + id + quote + rb + semi;
 	Query(str.c_str());
-
-
 }
 
- 

@@ -6,12 +6,14 @@ using namespace std;
 
 void DeleteCourse(string course_id,string stu_id){//删课 
 	string str = "call DeleteCourse(";
-	str += quote + course_id + quote +comma+quote+course_id+quote+comma+ rb + semi;
+	str += quote + course_id + quote +comma+quote+stu_id+quote+ rb + semi;
+	cout << str;
 	Query(str.c_str(), "删除成功", "删除失败");
 }
 void CourseSelected(string stu_id) {//已选课程
 	string str = "call CourseSelected(";
 	str += quote + stu_id + quote + rb + semi;
+	cout << str;
 	Query(str.c_str(), "查询成功选课成功", "查询选课失败");
 }
 void SelectCourse(string course_id, string stu_id,string tea_id) {//选课  ps:时间,选课数量，不能选选修课 有限制根据管理员规定  大一不能选
@@ -42,10 +44,11 @@ void CourseStat(string course_id) {//获得选课信息（课程和对应选课�
 }
 				  /*管理员，老师*/
 
-void PrintCourseStat() {//选课信息打印（输出到txt）
+int PrintCourseStat() {//选课信息打印（输出到txt）
 	string str = "call PrintCourse()";
-	fstream course_select("course_select.txt");
-	Query(str.c_str(), &course_select);
+	fstream CourseSlected("course_select.txt");
+	return Query(str.c_str(), &CourseSlected);
+
 }
 
 

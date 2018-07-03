@@ -11,10 +11,11 @@ private:
 	string id;
 	string password;
 public:
+
 	Student(string i, string p) :id(i), password(p) {};
 	~Student() {};
 	Student() {};
-
+	string get_id() { return id; }
 	int Load();//学生登录
 			   //void SelectCourse();//选课
 			   //void DeleteCourse();//删除课

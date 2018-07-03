@@ -11,6 +11,7 @@ private:
 	string password; 
 public:
 	Leader(string a, string b) :id(a), password(b) {};
+	string get_id() { return id; }
 	Leader() {};
 	~Leader() {};
 	string getdep_id();//返回该领导所在院的dep_ip，这是个为了简化LeaQueryTea()查询的辅助函数
